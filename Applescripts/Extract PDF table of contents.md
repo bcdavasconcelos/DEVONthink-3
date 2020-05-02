@@ -88,4 +88,4 @@ end replaceText
 [1]:	https://discourse.devontechnologies.com/t/applescript-to-extract-the-pdfs-toc-into-a-markdown-file/55078?u=bernardo_v
 [2]:	https://weibeld.net/pdf/extract_pdf_toc.html
 
-#Applescript
+#Applescript #DEVONthink

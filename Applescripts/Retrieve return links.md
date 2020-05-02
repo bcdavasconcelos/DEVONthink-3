@@ -116,4 +116,4 @@ end sortlist
 
 [1]:	https://discourse.devontechnologies.com/t/return-links-back-links/54390?u=bernardo_v
 
-#Applescript
+#Applescript #DEVONthink

@@ -36,4 +36,4 @@ end performSmartRule
 
 [1]:	https://bcdav.blot.im/DT3-Smart-rules
 
-#Applescript
+#Applescript #DEVONthink

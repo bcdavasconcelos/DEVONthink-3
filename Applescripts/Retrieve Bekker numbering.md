@@ -40,4 +40,4 @@ end replaceText
 [1]:	https://discourse.devontechnologies.com/t/how-i-use-wiki-links-and-aliases-pt-2/47873
 [2]:	https://bcdav.blot.im/DT3-Smart-rules
 
-#Applescript
+#Applescript #DEVONthink
