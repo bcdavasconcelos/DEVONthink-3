@@ -1,13 +1,12 @@
-# Portable merged view of records
+# Portable merged view of records (ngan's original)
+
 For more information, see [this thread][1].
 
 ```applescript
 use AppleScript version "2.4" -- Yosemite (10.10) or later
 use scripting additions
 use script "Dialog Toolkit Plus" version "1.1.0"
-use script "RegexAndStuffLib"
 
--- 2020-05-02-17-52-37: butchered by bcdavasconcelos
 -- by ngan 2020.04.28
 -- v1b9 add progress indicator
 -- v1b8 add an internal option to use [[...]] or reference url for the name of each file section
@@ -16,17 +15,17 @@ use script "RegexAndStuffLib"
 -- v1b5 use QsortRecsByName,QsortRecsByMod,QsortRecsByCreate for speed
 -- v1b4 add metadata at the heading of MV file
 -- v1b3 working version: add selection dialog box and refresable merged view
-property FNRandomize : true
+
 property MVGpLocation : "/MergeView"
 property MVNameFormat : "YMDHNS" -- yr mon day hr min sec
-property sectionLinkFormat : "W" -- "W" for [[...]] style link, "U" for DT-URL link 
+property sectionLinkFormat : "U" -- "W" for [[...]] style link, "U" for DT-URL link 
 property showLastRefresh : true -- if true then show the last refeshed time at the header, if false hide the time in metadata
 
 -- don't change these properties
 property rtfHeader : "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">"
 property sortByOptLabel : {"Default", "Modification Date", "Creation Date", "Name"}
 
-global useSelOrGp, theGps, theGpsUUID, exSubGp, sortBy, sortOrder, addTags, addName, addSeparator, includePDF
+global useSelOrGp, theGps, theGpsUUID, exSubGp, sortBy, sortOrder, addTags, addName, addSeperator, includePDF
 global theRecords, theRecordsCount, theMVContent, theRecordName, eachRecordTags, theSeparator
 global newMV, theMV, theMVName, theMVContent, theRTFSource
 global rtfCount, mdCount, pdfCount
@@ -79,9 +78,9 @@ tell application id "DNtp"
 				set addName to false
 			end if
 			if theParameters's item 6 is "True" then
-				set addSeparator to true
+				set addSeperator to true
 			else
-				set addSeparator to false
+				set addSeperator to false
 			end if
 			if theParameters's item 7 is "True" then
 				set includePDF to true
@@ -133,20 +132,20 @@ tell application id "DNtp"
 			if sectionLinkFormat is "W" then
 				-- use [[..]] style wiki link
 				if sortBy is "N" or sortBy is "D" then
-					set theRecordName to "## " & each's name
+					set theRecordName to "###### [[" & each's name & "]]"
 				else if sortBy is "M" then
-					set theRecordName to "## " & each's name & " - Modified: " & my getDateString(each's modification date, "YMD", "-")
+					set theRecordName to "###### [[" & each's name & "]]" & "    Modified: " & my getDateString(each's modification date, "YMD", ".")
 				else if sortBy is "C" then
-					set theRecordName to "## " & each's name & " - Created: " & my getDateString(each's creation date, "YMD", "-")
+					set theRecordName to "###### [[" & each's name & "]]" & "    Created: " & my getDateString(each's creation date, "YMD", ".")
 				end if
 			else
 				-- use reference URL link and set to page 1
 				if sortBy is "N" or sortBy is "D" then
-					set theRecordName to "## [" & each's name & "](" & each's reference URL & "?page=0 )"
+					set theRecordName to "###### [" & each's name & "](" & each's reference URL & "?page=0 )"
 				else if sortBy is "M" then
-					set theRecordName to "## [" & each's name & "    Modified: " & my getDateString(each's modification date, "YMD", "-") & "](" & each's reference URL & "?page=0 )"
+					set theRecordName to "###### [" & each's name & "    Modified: " & my getDateString(each's modification date, "YMD", ".") & "](" & each's reference URL & "?page=0 )"
 				else if sortBy is "C" then
-					set theRecordName to "## [" & each's name & "    Created: " & my getDateString(each's creation date, "YMD", "-") & "](" & each's reference URL & "?page=o)"
+					set theRecordName to "###### [" & each's name & "    Created: " & my getDateString(each's creation date, "YMD", ".") & "](" & each's reference URL & "?page=o)"
 				end if
 				
 			end if
@@ -160,10 +159,10 @@ tell application id "DNtp"
 				--get the tags of each record and convert them into a string of wikilink in [[]] format
 				set eachRecordTags to name of (parents of each whose tag type is ordinary tag)
 				repeat with i from 1 to length of eachRecordTags
-					set eachRecordTags's item i to (eachRecordTags's item i) & ", "
+					set eachRecordTags's item i to "[[" & (eachRecordTags's item i) & "]]  "
 				end repeat
 				set eachRecordTags to my listToStr(my sortlist(eachRecordTags), "  ")
-				set eachRecordTags to return & eachRecordTags & return
+				
 			else
 				-- get reference url and convert them into md link
 				set eachRecordTags to (parents of each whose tag type is ordinary tag)
@@ -171,14 +170,14 @@ tell application id "DNtp"
 				repeat with i from 1 to length of eachRecordTags
 					set end of ll to "[" & name of (eachRecordTags's item i) & "](" & reference URL of (eachRecordTags's item i) & ")"
 				end repeat
-				set eachRecordTags to return & "**#:** " & my listToStr(my sortlist(ll), "  ") & return
+				set eachRecordTags to "**#:** " & my listToStr(my sortlist(ll), "  ")
 				
 			end if
 		end if
 		
 		--Set separator
-		if addSeparator then
-			set theSeparator to return & return & "***"
+		if addSeperator then
+			set theSeparator to "---"
 		else
 			set theSeparator to ""
 		end if
@@ -190,56 +189,13 @@ tell application id "DNtp"
 			set rtfCount to rtfCount + 1
 			set stepCount to stepCount + 1
 		else if type of each is markdown then
-			set theText to the plain text of each
-			if FNRandomize is true then
-				set theString1 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^1\\]" replace template "[^" & theString1 & "]"
-				set theString2 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^2\\]" replace template "[^" & theString2 & "]"
-				set theString3 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^3\\]" replace template "[^" & theString3 & "]"
-				set theString4 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^4\\]" replace template "[^" & theString4 & "]"
-				set theString5 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^5\\]" replace template "[^" & theString5 & "]"
-				set theString6 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^6\\]" replace template "[^" & theString6 & "]"
-				set theString7 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^7\\]" replace template "[^" & theString7 & "]"
-				set theString8 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^8\\]" replace template "[^" & theString8 & "]"
-				set theString9 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^9\\]" replace template "[^" & theString9 & "]"
-				set theString10 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^10\\]" replace template "[^" & theString10 & "]"
-				set theString11 to my return_random_string(true, false, false, true, false, 4)
-				--set theText to regex change theText search pattern "\\[\\^11\\]" replace template "[^" & theString11 & "]"
-				--set theString12 to my return_random_string(true, false, false, true, false, 4)
-				--set theText to regex change theText search pattern "\\[\\^12\\]" replace template "[^" & theString12 & "]"
-				--set theString13 to my return_random_string(true, false, false, true, false, 4)
-				--set theText to regex change theText search pattern "\\[\\^13\\]" replace template "[^" & theString13 & "]"
-				--set theString14 to my return_random_string(true, false, false, true, false, 4)
-				--set theText to regex change theText search pattern "\\[\\^14\\]" replace template "[^" & theString14 & "]"
-				--set theString15 to my return_random_string(true, false, false, true, false, 4)
-				--set theText to regex change theText search pattern "\\[\\^15\\]" replace template "[^" & theString15 & "]"
-				--set theString16 to my return_random_string(true, false, false, true, false, 4)
-				--set theText to regex change theText search pattern "\\[\\^16\\]" replace template "[^" & theString16 & "]"
-				--set theString17 to my return_random_string(true, false, false, true, false, 4)
-				--set theText to regex change theText search pattern "\\[\\^17\\]" replace template "[^" & theString17 & "]"
-				--set theString18 to my return_random_string(true, false, false, true, false, 4)
-				--set theText to regex change theText search pattern "\\[\\^18\\]" replace template "[^" & theString18 & "]"
-				--set theString19 to my return_random_string(true, false, false, true, false, 4)
-				--set theText to regex change theText search pattern "\\[\\^19\\]" replace template "[^" & theString19 & "]"
-				--set theString20 to my return_random_string(true, false, false, true, false, 4)
-				--set theText to regex change theText search pattern "\\[\\^20\\]" replace template "[^" & theString20 & "]"
-			end if
-			set theMVContent to theMVContent & theRecordName & return & theText & eachRecordTags & theSeparator & return
+			set theMVContent to theMVContent & theRecordName & return & return & plain text of each & return & return & return & eachRecordTags & return & return & theSeparator & return & return & return
 			set mdCount to mdCount + 1
 			set stepCount to stepCount + 1
 		else if type of each is PDF document and includePDF then
 			set pdfLink to ""
 			if addName is false then set pdfLink to "[" & each's name & "](" & each's reference URL & ")"
-			set theMVContent to theMVContent & theRecordName & return & pdfLink & return & return & return & eachRecordTags & return & return & theSeparator & return & return & return
+			set theMVContent to theMVContent & theRecordName & return & return & pdfLink & return & return & return & eachRecordTags & return & return & theSeparator & return & return & return
 			set pdfCount to pdfCount + 1
 			set stepCount to stepCount + 1
 		else
@@ -251,23 +207,19 @@ tell application id "DNtp"
 	
 	--add metadate to the heading of theMV
 	if showLastRefresh then
-		set theMVMetadata to "Markdown records: " & mdCount & return & "Last update: " & (my getDateString(current date, MVNameFormat, "-")) & return
-		--		set theMVMetadata to "Total records: " & theRecordsCount & return & "RTF/RTFD files: " & rtfCount & return & "Markdown files: " & mdCount & return & "PDF files: " & pdfCount & return & return & "Last refreshed: " & (my getDateString(current date, MVNameFormat, ".")) & return & return & theSeparator
-		
+		set theMVMetadata to "Total records: " & theRecordsCount & return & "RTF/RTFD files: " & rtfCount & return & "Markdown files: " & mdCount & return & "PDF files: " & pdfCount & return & return & "Last refreshed: " & (my getDateString(current date, MVNameFormat, ".")) & return & return & theSeparator
 	else
-		set theMVMetadata to "Last update: " & (my getDateString(current date, MVNameFormat, "-")) & return & "Markdown records: " & mdCount
+		set theMVMetadata to "Last refreshed: " & (my getDateString(current date, MVNameFormat, ".")) & return & "Total records: " & theRecordsCount & return & "RTF/RTFD files: " & rtfCount & return & "Markdown files: " & mdCount & return & "PDF files: " & pdfCount
 	end if
 	
-	-- Remove the last separator before the end of the document
-	set theMVContent to theMVMetadata & return & theMVContent
-	set theMVContent to regex change theMVContent search pattern return & "\\*\\*\\*" & return & "\\Z" replace template ""
+	set theMVContent to theMVMetadata & return & return & theMVContent
 	
 	if newMV then
 		-- name and create theMV
-		set theMVName to "MV - " & (my getDateString(current date, MVNameFormat, "-"))
+		set theMVName to "MV - " & (my getDateString(current date, MVNameFormat, "."))
 		set theMV to create record with {name:theMVName, source:theMVContent, type:markdown} in (get record at MVGpLocation)
 		-- save parameters to comment of MV	
-		set comment of theMV to my listToStr({"MV", sortBy, sortOrder, addTags, addName, addSeparator, includePDF, theGpsUUID}, ",")
+		set comment of theMV to my listToStr({"MV", sortBy, sortOrder, addTags, addName, addSeperator, includePDF, theGpsUUID}, ",")
 		open tab for record theMV
 		hide progress indicator
 	else
@@ -286,11 +238,11 @@ on getMVOpt()
 	local addNameOptLabel, addTagOptLabel
 	set {gpPopupList, gpPopupLabel} to my prepareGpsChoice()
 	if sectionLinkFormat is "W" then
-		set addNameOptLabel to "## Name"
-		set addTagOptLabel to "#Tags"
+		set addNameOptLabel to "Add [[Name]]"
+		set addTagOptLabel to "Add [[Tags]]"
 	else
-		set addNameOptLabel to "## Name's Link"
-		set addTagOptLabel to "#Tag's Link"
+		set addNameOptLabel to "Add Name's Link"
+		set addTagOptLabel to "Add Tag's Link"
 	end if
 	
 	
@@ -301,22 +253,22 @@ on getMVOpt()
 	if minWidth > accViewWidth then set accViewWidth to minWidth
 	
 	set {theRule3, theTop} to create rule (theTop - 8) rule width accViewWidth
-	set {addSeparatorOpt, theTop, newWidth} to create checkbox "Add separator" bottom (theTop + 8) max width accViewWidth / 3 - 8 with initial state -- comment out "with initial state" if default==not checked
+	set {addSeperatorOpt, theTop, newWidth} to create checkbox "Add seperator" bottom (theTop + 8) max width accViewWidth / 3 - 8 with initial state -- comment out "with initial state" if default==not checked
 	
-	set {addNameOpt, theTop, newWidth} to create checkbox addNameOptLabel bottom (theTop + 8) max width accViewWidth / 3 - 8 -- comment out "with initial state" if default==not checked
-	set {addTagOpt, theTop, newWidth} to create checkbox addTagOptLabel bottom (theTop + 8) max width accViewWidth / 3 - 8 -- comment out "with initial state" if default==not checked
+	set {addNameOpt, theTop, newWidth} to create checkbox addNameOptLabel bottom (theTop + 8) max width accViewWidth / 3 - 8 with initial state -- comment out "with initial state" if default==not checked
+	set {addTagOpt, theTop, newWidth} to create checkbox addTagOptLabel bottom (theTop + 8) max width accViewWidth / 3 - 8 with initial state -- comment out "with initial state" if default==not checked
 	
 	set {theRule2, theTop} to create rule (theTop + 12) rule width accViewWidth
-	set {sortOrderOpt, theTop, newWidth} to create checkbox "Descending (Uncheck = Ascending)" bottom (theTop + 8) max width accViewWidth / 3 - 8 -- with initial state -- comment out "with initial state" if default==not checked
+	set {sortOrderOpt, theTop, newWidth} to create checkbox "Descending (Uncheck = Ascending)" bottom (theTop + 8) max width accViewWidth / 3 - 8 with initial state -- comment out "with initial state" if default==not checked
 	
-	set {sortByOpt, theTop} to create matrix sortByOptLabel bottom (theTop + 8) max width accViewWidth initial choice 4
+	set {sortByOpt, theTop} to create matrix sortByOptLabel bottom (theTop + 8) max width accViewWidth initial choice 1
 	set {theRule1, theTop} to create rule (theTop + 12) rule width accViewWidth
 	set {gpPopup, theTop} to create popup gpPopupLabel bottom (theTop + 8) popup width accViewWidth initial choice 1
 	set {selOpt, theTop} to create matrix {"Use selection", "Use parent group or smart group"} bottom (theTop + 8) max width accViewWidth initial choice 1
 	set {theRule0, theTop} to create rule (theTop + 12) rule width accViewWidth
 	set {addPDFLinkOpt, theTop, newWidth} to create checkbox "Include PDF files as link in MV" bottom (theTop + 8) max width accViewWidth / 3 - 8 --with initial state 	
 	set {boldLabel, theTop} to create label "Merge Markdown, RTF, RTFD files" bottom theTop + 8 max width accViewWidth control size large size
-	set allControls to {theRule3, addSeparatorOpt, addNameOpt, addTagOpt, theRule2, sortOrderOpt, sortByOpt, theRule1, gpPopup, selOpt, theRule0, addPDFLinkOpt, boldLabel}
+	set allControls to {theRule3, addSeperatorOpt, addNameOpt, addTagOpt, theRule2, sortOrderOpt, sortByOpt, theRule1, gpPopup, selOpt, theRule0, addPDFLinkOpt, boldLabel}
 	set {buttonName, controlsResults} to display enhanced window "MergeView" acc view width accViewWidth acc view height theTop acc view controls allControls buttons theButtons with align cancel button
 	
 	
@@ -347,11 +299,11 @@ on getMVOpt()
 			end if
 			set addTags to controlsResults's item 4
 			set addName to controlsResults's item 3
-			set addSeparator to controlsResults's item 2
+			set addSeperator to controlsResults's item 2
 			set includePDF to controlsResults's item 12
 		end tell
 		
-		return {useSelOrGp, theGps, theGpsUUID, sortBy, sortOrder, addTags, addName, addSeparator, includePDF}
+		return {useSelOrGp, theGps, theGpsUUID, sortBy, sortOrder, addTags, addName, addSeperator, includePDF}
 	else
 		return "Cancel"
 	end if
@@ -478,7 +430,7 @@ on indexOfOneItem(theItem, theList)
 		0
 	end try
 end indexOfOneItem
-on getDateString(theDate, theDateFormat, theSeparator)
+on getDateString(theDate, theDateFormat, theSeperator)
 	tell application id "DNtp"
 		local y, m, d, h, n, s, T
 		local lol, ds
@@ -499,7 +451,7 @@ on getDateString(theDate, theDateFormat, theSeparator)
 		set ds to ds & (my lolLookup(each as string, 1, 2, lol))'s item 2
 	end repeat
 	
-	return my listToStr(ds, theSeparator)
+	return my listToStr(ds, theSeperator)
 	
 end getDateString
 on padNum(lngNum, lngDigits)
@@ -566,31 +518,6 @@ on sortlist(theList)
 	end repeat
 	return theSortedList
 end sortlist
-on return_random_string(include_capitals, include_lowers, include_diacriticals, include_numbers, include_nonalphanumerics, string_length)
-	set the_captials to "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	if include_diacriticals then set the_captials to the_captials & "                    ?"
-	set the_lowers to "abcdefghijklmnopqrstuvwxyz"
-	if include_diacriticals then set the_lowers to the_lowers & "                    ??"
-	set the_numbers to "0123456789"
-	set random_pool to {}
-	if include_capitals then set end of random_pool to the_captials
-	if include_lowers then set end of random_pool to the_lowers
-	if include_numbers then set end of random_pool to the_numbers
-	if include_nonalphanumerics then
-		--this is because the high ASCII chars won't come through in the post:
-		repeat with this_num in {33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 58, 59, 60, 61, 62, 63, 64, 91, 92, 93, 94, 95, 96, 123, 124, 125, 126, 127, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 208, 209, 210, 211, 212, 213, 214, 215, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 240, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255}
-			set end of random_pool to ASCII character this_num
-		end repeat
-	end if
-	set random_pool to characters of (random_pool as string)
-	set return_string to {}
-	repeat string_length times
-		set end of return_string to (item (random number from 1 to (count random_pool)) of random_pool)
-	end repeat
-	return return_string as string
-end return_random_string
-
-
 ```
 
 [1]:	https://discourse.devontechnologies.com/t/script-refreshable-portable-merged-view-of-files-in-mixed-formats-direct-almost-editing-of-source-files-content-dynamically-linked-to-groups-tags/55241/5
