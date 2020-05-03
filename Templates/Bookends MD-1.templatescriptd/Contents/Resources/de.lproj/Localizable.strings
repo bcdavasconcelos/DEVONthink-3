@@ -1,0 +1,14 @@
+/* Localized Strings */
+
+"Reference" = "Literaturverweis";
+
+"Type here." = "Geben Sie Ihre Notizen hier ein.";
+"Bookends not available or outdated" = "Bookends nicht verfügbar oder veraltet";
+"This smart template needs Bookends 11.2.10 or later." = "Diese intelligente Vorlage benötigt Bookends 11.2.10 oder neuer.";
+"No references selected" = "Keine Literaturverweise ausgewählt";
+"Please select at least one reference in Bookends. Then try again." = "Bitte wählen Sie mindestens einen Literaturverweis in Bookends aus. Versuchen Sie es dann noch einmal.";
+"Could not access reference" = "Literaturverweis nicht verfügbar";
+"Bookends is not available, outdated (this smart template needs Bookends 11.2.10 or later), or the selected reference could not be found for some reason." = "Bookends ist nicht verfügbar, veraltet (diese intelligente Vorlage benötigt Bookends 11.2.10 oder neuer) oder die ausgewählten Literaturverweise konnten aus irgendeinem Grund nicht gefunden werden.";
+
+/* Buttons */
+"Cancel" = "Abbrechen";
