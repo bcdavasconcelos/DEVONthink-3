@@ -1,7 +1,6 @@
-# DLight
+# SanHo Light
 
-
-```applescript
+```css
 /* "Cormorant Garamond SemiBold" */
 body {
 font-family: "Alegreya";
@@ -14,8 +13,8 @@ max-width: 800px;
 
 
 html {
-background-color: #2b3636;
-color: #cdcccc;
+background-color: #fefefe;
+color: #23384d;
 text-rendering: optimizeLegibility;
 }
 
@@ -564,14 +563,14 @@ transition: color .1s ease-out, border-color .1s ease-out, background-color .1s 
 
 a {
   text-decoration: none;
-/*   color: #cdcccc; */
-color: #9bcb98;
+/*   color: #23384d; */
+color: #876eaf;
 /*   font-weight: 500; */
 }
 a:hover, a:active, a:focus {
   outline: 0;
-  color: #2b3636;
-  background: #9bcb98;
+  color: #fefefe;
+  background: #876eaf;
 }
 
 ul,
@@ -590,8 +589,8 @@ font-family: inherit;
 }
 
 blockquote {
-background: #556c68;
-border-left: 10px solid #2d3e42;
+background: #fcf2f3;
+border-left: 10px solid #edb7b4;
 margin: 1.5em 10px;
 padding: 0.5em 10px;
 position: relative;
@@ -599,7 +598,7 @@ quotes: "\201C""\201D""\2018""\2019";
 }
 
 blockquote:before {
-color: #2d3e42;
+color: #edb7b4;
 content: open-quote;
 font-size: 4em;
 line-height: 0.1em;
@@ -608,14 +607,14 @@ vertical-align: -0.4em;
 }
 
 blockquote p {
-color: #cdcccc;
+color: #23384d;
 margin-top: 0.5em;
 margin-bottom: 0.5em;
 display: inline;
 }
 
 blockquote figcaption {
-color: #cdcccc;
+color: #23384d;
 }
 
 q::before {
@@ -634,14 +633,14 @@ font-size: 1em;
 }
 
 code {
-font-family: Ubunto, monospace;
+font-family: TheSansMono Office, monospace;
 font-size: .85rem;
-color: #cdcccc;
+color: #666;
 width: auto;
 margin-top: 0em;
 margin-bottom: 0em;
 padding: 0px 0rem;
-background-color: #556c68;
+background-color: #f7f3e6;
 border-radius: 0rem;
 border: 0px solid #d6d8db;
 /* border-left: 10px solid #f3ecd8; */
@@ -663,7 +662,7 @@ textarea {
 padding: .5rem .625rem;
 border-radius: .25rem;
 border: 1px solid #ccdae3;
-background-color: #2b3636;
+background-color: #fefefe;
 -webkit-appearance: none
 }
 
@@ -734,8 +733,8 @@ background: #67b03e;
 
 mark,
 span.critic {
-background: #337e47;
-color: #cdcccc;
+background: #fec03e;
+color: #23384d;
 }
 
 span.critic.comment,
@@ -751,3 +750,6 @@ span.critic.comment::after {
 content: " <<}";
 }
 ```
+
+
+#CSS
