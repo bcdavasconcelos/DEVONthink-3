@@ -7,7 +7,7 @@ use scripting additions
 use script "Dialog Toolkit Plus" version "1.1.0"
 use script "RegexAndStuffLib"
 
--- 2020-05-02-17-52-37: butchered by bcdavasconcelos
+-- butchered by bcdavasconcelos (2020-05-03-14-06-45)
 -- by ngan 2020.04.28
 -- v1b9 add progress indicator
 -- v1b8 add an internal option to use [[...]] or reference url for the name of each file section
@@ -16,11 +16,13 @@ use script "RegexAndStuffLib"
 -- v1b5 use QsortRecsByName,QsortRecsByMod,QsortRecsByCreate for speed
 -- v1b4 add metadata at the heading of MV file
 -- v1b3 working version: add selection dialog box and refresable merged view
+
 property FNRandomize : true
 property MVGpLocation : "/MergeView"
 property MVNameFormat : "YMDHNS" -- yr mon day hr min sec
 property sectionLinkFormat : "W" -- "W" for [[...]] style link, "U" for DT-URL link 
 property showLastRefresh : true -- if true then show the last refeshed time at the header, if false hide the time in metadata
+
 
 -- don't change these properties
 property rtfHeader : "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">"
@@ -192,46 +194,47 @@ tell application id "DNtp"
 		else if type of each is markdown then
 			set theText to the plain text of each
 			if FNRandomize is true then
-				set theString1 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^1\\]" replace template "[^" & theString1 & "]"
-				set theString2 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^2\\]" replace template "[^" & theString2 & "]"
-				set theString3 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^3\\]" replace template "[^" & theString3 & "]"
-				set theString4 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^4\\]" replace template "[^" & theString4 & "]"
-				set theString5 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^5\\]" replace template "[^" & theString5 & "]"
-				set theString6 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^6\\]" replace template "[^" & theString6 & "]"
-				set theString7 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^7\\]" replace template "[^" & theString7 & "]"
-				set theString8 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^8\\]" replace template "[^" & theString8 & "]"
-				set theString9 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^9\\]" replace template "[^" & theString9 & "]"
-				set theString10 to my return_random_string(true, false, false, true, false, 4)
-				set theText to regex change theText search pattern "\\[\\^10\\]" replace template "[^" & theString10 & "]"
-				set theString11 to my return_random_string(true, false, false, true, false, 4)
-				--set theText to regex change theText search pattern "\\[\\^11\\]" replace template "[^" & theString11 & "]"
-				--set theString12 to my return_random_string(true, false, false, true, false, 4)
-				--set theText to regex change theText search pattern "\\[\\^12\\]" replace template "[^" & theString12 & "]"
-				--set theString13 to my return_random_string(true, false, false, true, false, 4)
-				--set theText to regex change theText search pattern "\\[\\^13\\]" replace template "[^" & theString13 & "]"
-				--set theString14 to my return_random_string(true, false, false, true, false, 4)
-				--set theText to regex change theText search pattern "\\[\\^14\\]" replace template "[^" & theString14 & "]"
-				--set theString15 to my return_random_string(true, false, false, true, false, 4)
-				--set theText to regex change theText search pattern "\\[\\^15\\]" replace template "[^" & theString15 & "]"
-				--set theString16 to my return_random_string(true, false, false, true, false, 4)
+				set theString1 to my return_random_string(true, false, false, true, false, 2)
+				set theString2 to my return_random_string(true, false, false, true, false, 2)
+				set theString3 to my return_random_string(true, false, false, true, false, 2)
+				set theString4 to my return_random_string(true, false, false, true, false, 2)
+				set theString5 to my return_random_string(true, false, false, true, false, 2)
+				set theString6 to my return_random_string(true, false, false, true, false, 2)
+				set theString7 to my return_random_string(true, false, false, true, false, 2)
+				set theString8 to my return_random_string(true, false, false, true, false, 2)
+				set theString9 to my return_random_string(true, false, false, true, false, 2)
+				set theString10 to my return_random_string(true, false, false, true, false, 2)
+				set theString11 to my return_random_string(true, false, false, true, false, 2)
+				set theString12 to my return_random_string(true, false, false, true, false, 2)
+				set theString13 to my return_random_string(true, false, false, true, false, 2)
+				set theString14 to my return_random_string(true, false, false, true, false, 2)
+				set theString15 to my return_random_string(true, false, false, true, false, 2)
+				--set theString16 to my return_random_string(true, false, false, true, false, 2)
+				--set theString17 to my return_random_string(true, false, false, true, false, 2)
+				--set theString18 to my return_random_string(true, false, false, true, false, 2)
+				--set theString19 to my return_random_string(true, false, false, true, false, 2)
+				--set theString20 to my return_random_string(true, false, false, true, false, 2)
+				if theText contains "[^1]" then set theText to regex change theText search pattern "\\[\\^1\\]" replace template "[^" & theString1 & "]"
+				if theText contains "[^2]" then set theText to regex change theText search pattern "\\[\\^2\\]" replace template "[^" & theString2 & "]"
+				if theText contains "[^3]" then set theText to regex change theText search pattern "\\[\\^3\\]" replace template "[^" & theString3 & "]"
+				if theText contains "[^4]" then set theText to regex change theText search pattern "\\[\\^4\\]" replace template "[^" & theString4 & "]"
+				if theText contains "[^5]" then set theText to regex change theText search pattern "\\[\\^5\\]" replace template "[^" & theString5 & "]"
+				if theText contains "[^6]" then set theText to regex change theText search pattern "\\[\\^6\\]" replace template "[^" & theString6 & "]"
+				if theText contains "[^7]" then set theText to regex change theText search pattern "\\[\\^7\\]" replace template "[^" & theString7 & "]"
+				if theText contains "[^8]" then set theText to regex change theText search pattern "\\[\\^8\\]" replace template "[^" & theString8 & "]"
+				if theText contains "[^9]" then set theText to regex change theText search pattern "\\[\\^9\\]" replace template "[^" & theString9 & "]"
+				if theText contains "[^10]" then set theText to regex change theText search pattern "\\[\\^10\\]" replace template "[^" & theString10 & "]"
+				if theText contains "[^11]" then set theText to regex change theText search pattern "\\[\\^11\\]" replace template "[^" & theString11 & "]"
+				if theText contains "[^12]" then set theText to regex change theText search pattern "\\[\\^12\\]" replace template "[^" & theString12 & "]"
+				if theText contains "[^13]" then set theText to regex change theText search pattern "\\[\\^13\\]" replace template "[^" & theString13 & "]"
+				if theText contains "[^14]" then set theText to regex change theText search pattern "\\[\\^14\\]" replace template "[^" & theString14 & "]"
+				if theText contains "[^15]" then set theText to regex change theText search pattern "\\[\\^15\\]" replace template "[^" & theString15 & "]"
 				--set theText to regex change theText search pattern "\\[\\^16\\]" replace template "[^" & theString16 & "]"
-				--set theString17 to my return_random_string(true, false, false, true, false, 4)
 				--set theText to regex change theText search pattern "\\[\\^17\\]" replace template "[^" & theString17 & "]"
-				--set theString18 to my return_random_string(true, false, false, true, false, 4)
 				--set theText to regex change theText search pattern "\\[\\^18\\]" replace template "[^" & theString18 & "]"
-				--set theString19 to my return_random_string(true, false, false, true, false, 4)
 				--set theText to regex change theText search pattern "\\[\\^19\\]" replace template "[^" & theString19 & "]"
-				--set theString20 to my return_random_string(true, false, false, true, false, 4)
 				--set theText to regex change theText search pattern "\\[\\^20\\]" replace template "[^" & theString20 & "]"
+				
 			end if
 			set theMVContent to theMVContent & theRecordName & return & theText & eachRecordTags & theSeparator & return
 			set mdCount to mdCount + 1
