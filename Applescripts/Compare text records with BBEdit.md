@@ -42,6 +42,6 @@ tell application "BBEdit"
 end tell
 ```
 
-[1]:	https://discourse.devontechnologies.com/t/compare-text-files-with-bbedit/55183/2?u=bernardo_v
+[1]:	https://discourse.devontechnologies.com/t/compare-text-files-with-bbedit/55183/2
 
 #Applescript #DEVONthink
