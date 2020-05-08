@@ -35,6 +35,9 @@ ReturnLink
 
 ```applescript
 
+-- 2020-05-08-19-07-05 Conditional to prevent accidental triggering of theUUID path
+
+
 on run
 	
 	-- Identify the record
@@ -48,6 +51,8 @@ on run
 	
 	try -- via UUID
 		set theUUID to ((system attribute "theUUID") as text)
+		set theNr to count (theUUID)
+		if theNr is not 36 then set theUUID to ""
 	end try
 	
 	

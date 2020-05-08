@@ -6,6 +6,7 @@
 -- 2020-05-07-14-50-03
 -- 2020-05-07-23-53-04 Added the index alongside the class of the window in the subtitles
 -- 2020-05-08-15-40-09 Removed the `\"uid\": \"" & FullID & "\",` line so that DEVONthink manages the sort order and not Alfred.
+-- 2020-05-08-16-54-00 JSON Handler, changed theName to the class of theWin
 
 on run
 	
@@ -18,27 +19,22 @@ on run
 		
 		repeat with theWin in theWins -- the loop
 			
-			set WinID to the id of theWin
-			set theSubtitle to (class of theWin as text)
-			set theName to name of theWin -- preparing the display info
-			if theSubtitle is "document window" then set the theName to my change_case(theName, "upper")
-			set theSubtitle to theSubtitle & space & (index of theWin) -- preparing the display info
-			set theName to my replaceText(theName, "\"", "")
+			set theName to (class of theWin as text) & space & (index of theWin) -- preparing the display info
+			--	if theSubtitle is "document window" then set the theName to my change_case(theName, "upper")
 			
-			set theString to "{
-			       \"title\": \"" & theName & "\",
-			       \"subtitle\": \"" & theSubtitle & "\",
-			       \"arg\":  \"" & WinID & "\"
-			       },"
 			
+			set theSubtitle to name of theWin -- preparing the display info
+			set theSubtitle to my replaceText(theSubtitle, "\"", "")
+			
+			set theArg to (id of theWin)
+			
+			set theString to my json_string(theName, theSubtitle, theArg)
 			set theStrings to theStrings & theString & return
 			
 		end repeat
 		
 		
-		set CompleteString to "{\"items\": [" & return & theStrings & "]}" -- adding the beggining and end of the string
-		
-		set CompleteString to my replaceText(CompleteString, "," & return & "]}", return & "]}") -- removal of the very last comma
+		set CompleteString to my complete_json_string(theStrings)
 		
 		set CompleteString to my replaceText(CompleteString, "document window", "doc win")
 		set CompleteString to my replaceText(CompleteString, "viewer window", "vi win")
@@ -49,6 +45,22 @@ on run
 	end tell
 	
 end run
+
+
+on json_string(theName, theSubtitle, theArg)
+	set theString to "{
+					        \"title\": \"" & theName & "\",
+					        \"subtitle\": \"" & theSubtitle & "\",
+					        \"arg\":  \"" & theArg & "\",
+					        },"
+	return theString
+end json_string
+
+on complete_json_string(theStrings)
+	set CompleteString to ""
+	set CompleteString to "{\"items\": [" & return & theStrings & "]}" -- adding the beggining and end of the string
+	set CompleteString to my replaceText(CompleteString, "," & return & "]}", return & "]}") -- removal of the very last comma
+end complete_json_string
 
 
 on replaceText(theString, old, new)
@@ -80,6 +92,7 @@ on change_case(this_text, this_case)
 	end repeat
 	return the new_text
 end change_case
+
 
 
 
