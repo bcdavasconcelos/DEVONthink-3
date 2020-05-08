@@ -36,11 +36,8 @@ ReturnLink
 
 ```applescript
 
-
--- 2020-05-08-19-07-05 Conditional to prevent accidental triggering of theUUID path
 -- 2020-05-08-19-58-13 Added try before actions to prevent the script from stopping; avoided encoding error in renaming action by using the clipboard.
-
-
+-- 2020-05-08-19-07-05 Conditional to prevent accidental triggering of theUUID path
 on run
 	
 	-- Identify the record
