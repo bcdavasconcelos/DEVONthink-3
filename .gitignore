@@ -1,2 +1,3 @@
-
 *.plist
+*.Ulysses-Group.plist
+.DS_Store
