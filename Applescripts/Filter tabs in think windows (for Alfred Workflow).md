@@ -7,6 +7,8 @@
 -- 2020-05-07-23-44-00 - Added the index alongside the class of the window in the subtitles
 -- 2020-05-08-11-14-48 Changed the name of docs to uppercase
 -- 2020-05-08-15-40-09 Removed the `\"uid\": \"" & FullID & "\",` line so that DEVONthink manages the sort order and not Alfred.
+-- 2020-05-08-16-45-57 JSON handler
+-- 2020-05-08-18-48-24 Support for BBEdit, MMD Composer, Marked 2, OmniOutliner
 
 -- This script can collect: i. all tabs (in all windows) or ii. tabs in specific think window 
 -- if WinID is 0 → get tabs from all think windows
@@ -43,21 +45,17 @@ on run
 			repeat with theTab in theTabs -- inner loop -- collecting info on each tab 
 				
 				try
-					
 					set TabID to the id of theTab -- preparing the argument
-					set FullID to WinID & "," & TabID -- preparing the argument
-					set theSubtitle to "In " & (class of theWin)
 					set theName to name of content record in theTab -- preparing the display info
-					if theSubtitle is "In document window" then set the theName to my change_case(theName, "upper")
-					set theSubtitle to theSubtitle & space & (index of theWin) -- preparing the display info
 					set theName to my replaceText(theName, "\"", "")
 					
+					set theSubtitle to "In " & (class of theWin)
+					if theSubtitle is "In document window" then set the theName to my change_case(theName, "upper")
+					set theSubtitle to theSubtitle & space & (index of theWin) -- preparing the display info
 					
-					set theString to "{
-				        \"title\": \"" & theName & "\",
-				        \"subtitle\": \"" & theSubtitle & "\",
-				        \"arg\":  \"" & FullID & "\",
-				        },"
+					
+					set theArg to WinID & "," & TabID -- preparing the argument
+					set theString to my json_string(theName, theSubtitle, theArg)
 					
 					set theStrings to theStrings & theString & return
 					
@@ -66,9 +64,71 @@ on run
 			end repeat -- end of inner loop
 		end repeat -- end of outer loop
 		
-		set CompleteString to "{\"items\": [" & return & theStrings & "]}" -- adding the beggining and end of the string
-		set CompleteString to my replaceText(CompleteString, "," & return & "]}", return & "]}") -- removal of the very last comma
-		-- set CompleteString to my replaceText(CompleteString, "in document window", "IN DOC WINDOW")
+		if application "BBEdit" is running then
+			try
+				tell application "BBEdit"
+					set myFile to get file of front document of window 1
+				end tell
+				set thePath to POSIX path of myFile
+				set theRecord to my lookup_path(thePath)
+				set theString to my json_with_theRecord(theRecord, "BBedit")
+				set theStrings to theStrings & theString & return
+			end try
+		end if
+		
+		if application "HoudahSpot" is running then
+			try
+				tell application "HoudahSpot"
+					tell document 1
+						set theSelection to selection
+						set thisResult to item 1 of theSelection
+						set thePath to path of thisResult
+					end tell
+				end tell
+				set theRecord to my lookup_path(thePath)
+				set theString to my json_with_theRecord(theRecord, "HoudahSpot")
+				set theStrings to theStrings & theString & return
+			end try
+		end if
+		
+		if application "Marked 2" is running then
+			try
+				tell application "Marked 2"
+					set thePath to path of document 1
+				end tell
+				set theRecord to my lookup_path(thePath)
+				set theString to my json_with_theRecord(theRecord, "Marked 2")
+				set theStrings to theStrings & theString & return
+			end try
+		end if
+		
+		if application "MultiMarkdown Composer" is running then
+			try
+				tell application "MultiMarkdown Composer"
+					set doc to document of window 1
+					set theFile to file of doc
+				end tell
+				set thePath to POSIX path of theFile
+				set theRecord to my lookup_path(thePath)
+				set theString to my json_with_theRecord(theRecord, "MultiMarkdown Composer")
+				set theStrings to theStrings & theString & return
+			end try
+		end if
+		
+		if application "OmniOutliner" is running then
+			try
+				tell application "OmniOutliner"
+					set theFile to file of document 1
+					set thePath to POSIX path of theFile
+				end tell
+				set theRecord to my lookup_path(thePath)
+				set theString to my json_with_theRecord(theRecord, "OmniOutliner")
+				set theStrings to theStrings & theString & return
+			end try
+		end if
+		
+		set CompleteString to my complete_json_string(theStrings)
+		
 		set CompleteString to my replaceText(CompleteString, "in document window", "in doc window")
 		set CompleteString to my replaceText(CompleteString, "in viewer window", "in vi window")
 		
@@ -78,6 +138,56 @@ on run
 	
 end run -- thank god, I was getting tired
 
+
+on json_string(theName, theSubtitle, theArg)
+	set theString to "{
+					        \"title\": \"" & theName & "\",
+					        \"subtitle\": \"" & theSubtitle & "\",
+					        \"arg\":  \"" & theArg & "\",
+					        },"
+	return theString
+end json_string
+
+on complete_json_string(theStrings)
+	set CompleteString to ""
+	set CompleteString to "{\"items\": [" & return & theStrings & "]}" -- adding the beggining and end of the string
+	set CompleteString to my replaceText(CompleteString, "," & return & "]}", return & "]}") -- removal of the very last comma
+end complete_json_string
+
+on json_with_theRecord(theRecord, theApp)
+	try
+		tell application id "DNtp"
+			set theName to name of theRecord -- preparing the display info
+			set theName to my replaceText(theName, "\"", "")
+			
+			set theSubtitle to "In " & theApp
+			
+			set theArg to the uuid of theRecord -- preparing the argument
+			
+			set theString to my json_string(theName, theSubtitle, theArg)
+			return theString
+		end tell
+	end try
+end json_with_theRecord
+
+on lookup_path(thePath)
+	tell application id "DNtp"
+		try
+			set theDatabases to databases
+			set theResults to {}
+			
+			repeat with thisDatabase in theDatabases
+				set thisDatabasesResults to lookup records with path thePath in thisDatabase
+				set theResults to theResults & thisDatabasesResults
+			end repeat
+			
+			set thePath to ""
+			set theRecord to item 1 of theResults
+			return theRecord
+			
+		end try
+	end tell
+end lookup_path
 
 on replaceText(theString, old, new)
 	set {TID, text item delimiters} to {text item delimiters, old}

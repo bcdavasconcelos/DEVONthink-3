@@ -1,6 +1,8 @@
 # Open frontmost document in DEVONthink (@find author)
 
 ```applescript
+
+
 tell application "MultiMarkdown Composer" to activate
 
 set thePath to my path_to_front_document()
@@ -360,7 +362,9 @@ on front_testing()
 		set secondFrontmost to first process where it is frontmost
 	end tell
 end front_testing
+
+
 ```
 
 
-#Applescript #DEVONthink
+#Applescript #DEVONthink #Alfred

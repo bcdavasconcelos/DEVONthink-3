@@ -5,21 +5,33 @@
 -- Retrieve return links (for Alfred Workflow)
 -- 2020-05-07-19-53-21
 -- 2020-05-08-15-40-09 Removed the `\"uid\": \"" & FullID & "\",` line so that DEVONthink manages the sort order and not Alfred.
+-- 2020-05-08-20-01-31 Changed the argument in json string to theUUID
 
 property theSubtitle : "Attach this record to think window"
 on run
 	
 	global WinID, TabID, theRecord, theDB, theAliases, theSearch, theResult, theResults, theResultName, theUUID, theName, theString, theStrings, CompleteString
 	
+	try
+		set WinID to ((system attribute "WinID") as number)
+		set TabID to ((system attribute "TabID") as number)
+	end try
 	
-	set WinID to ((system attribute "WinID") as number)
-	set TabID to ((system attribute "TabID") as number)
+	try -- via UUID
+		set theUUID to ((system attribute "theUUID") as text)
+		set theNr to count (theUUID)
+		if theNr is not 36 then set theUUID to ""
+	end try
 	
 	tell application id "DNtp"
 		
 		set theStrings to {}
-		set theRecord to content record of (tab id TabID) in (window id WinID)
-		--set theRecord to content record of think window 1
+		if theUUID is not "" then
+			set theRecord to get record with uuid theUUID
+		else
+			set theRecord to content record of (tab id TabID) in (window id WinID)
+		end if
+		
 		set theDB to the database of theRecord
 		set theName to the name of theRecord
 		set theAliases to aliases of theRecord
@@ -48,7 +60,7 @@ on run
 			set theString to "{
 				        \"title\": \"" & theName & "\",
 				        \"subtitle\": \"" & theSubtitle & "\",
-				        \"arg\":  \"" & theURL & "\",
+				        \"arg\":  \"" & theUUID & "\",
 				        },"
 			
 			set theStrings to theStrings & theString & return
@@ -99,6 +111,7 @@ on trimtext(theText, theCharactersToTrim, theTrimDirection)
 	end if
 	return theText
 end trimtext
+
 
 
 ```
