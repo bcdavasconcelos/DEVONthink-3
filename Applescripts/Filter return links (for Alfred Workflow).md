@@ -5,7 +5,7 @@
 -- Retrieve return links (for Alfred Workflow)
 -- 2020-05-07-19-53-21
 
-property theSubtitle : ""
+property theSubtitle : "Attach this record to think window"
 on run
 	
 	global WinID, TabID, theRecord, theDB, theAliases, theSearch, theResult, theResults, theResultName, theUUID, theName, theString, theStrings, CompleteString
@@ -17,8 +17,8 @@ on run
 	tell application id "DNtp"
 		
 		set theStrings to {}
-		--		set theRecord to content record of (tab id TabID) in (window id WinID)
-		set theRecord to content record of think window 1
+		set theRecord to content record of (tab id TabID) in (window id WinID)
+		--set theRecord to content record of think window 1
 		set theDB to the database of theRecord
 		set theName to the name of theRecord
 		set theAliases to aliases of theRecord
@@ -41,13 +41,14 @@ on run
 			set theRecord to get record with uuid theUUID
 			set theName to the name of theRecord -- preparing the display info
 			set theName to my replaceText(theName, "\"", "")
+			set theURL to the reference URL of theRecord
 			
 			
 			set theString to "{
 				      \"uid\": \"" & theUUID & "\",
 				        \"title\": \"" & theName & "\",
 				        \"subtitle\": \"" & theSubtitle & "\",
-				        \"arg\":  \"" & theUUID & "\",
+				        \"arg\":  \"" & theURL & "\",
 				        },"
 			
 			set theStrings to theStrings & theString & return
@@ -98,4 +99,8 @@ on trimtext(theText, theCharactersToTrim, theTrimDirection)
 	end if
 	return theText
 end trimtext
+
 ```
+
+
+#Applescript #DEVONthink #Alfred

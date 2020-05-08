@@ -37,52 +37,110 @@ ReturnLink
 
 on run
 	
-	set WinID to ((system attribute "WinID") as number)
-	set TabID to ((system attribute "TabID") as number)
+	-- Identify the record
+	try -- via tab info	
+		set WinID to ((system attribute "WinID") as number)
+	end try
+	try
+		set TabID to ((system attribute "TabID") as number)
+	end try
 	
-	set ActionCloseWin to ((system attribute "ActionCloseWin") as boolean)
-	set ActionCloseTab to ((system attribute "ActionClose") as boolean)
 	
-	set ActionAttach to ((system attribute "ActionAttach") as number) -- contains the id of the target window
-	set DetachAll to ((system attribute "DetachAll") as boolean)
+	try -- via UUID
+		set theUUID to ((system attribute "theUUID") as text)
+	end try
 	
-	set ActionOpenNewDoc to ((system attribute "ActionOpenNewDoc") as boolean)
-	set ActionOpenNewWin to ((system attribute "ActionOpenNewWin") as boolean)
 	
-	set ActionActivate to ((system attribute "ActionActivate") as boolean)
-	set ActionOpenEx to ((system attribute "ActionOpenEx") as boolean)
+	-- Actions	
+	try -- close think window
+		set ActionCloseWin to ((system attribute "ActionCloseWin") as number)
+	end try
 	
-	set ActionRename to ((system attribute "ActionRename") as text) -- contains the new name
-	set ReturnLink to ((system attribute "ReturnLink") as text)
+	
+	try -- close selected tab
+		set ActionCloseTab to ((system attribute "ActionCloseTab") as number)
+	end try
+	
+	
+	try -- attach record to selected think window
+		set ActionAttach to ((system attribute "ActionAttach") as number) -- contains the id of the target window
+	end try
+	
+	
+	try -- detach all tabs from selected think window
+		set DetachAll to ((system attribute "DetachAll") as number)
+	end try
+	
+	
+	
+	try -- open record in new document window
+		set ActionOpenNewDoc to ((system attribute "ActionOpenNewDoc") as number)
+	end try
+	
+	
+	try -- open record in new viewer window
+		set ActionOpenNewWin to ((system attribute "ActionOpenNewWin") as number)
+	end try
+	
+	
+	try -- activate the record
+		set ActionActivate to ((system attribute "ActionActivate") as number)
+	end try
+	
+	
+	
+	try -- open record externally
+		set ActionOpenEx to ((system attribute "ActionOpenEx") as number)
+	end try
+	
+	
+	-- Metadata manipulation
+	try -- rename the record
+		set ActionRename to ((system attribute "ActionRename") as text) -- contains the new name
+	end try
+	try -- change the aliases
+		set ActionAliases to ((system attribute "ActionAliases") as text) -- contains the new name
+	end try	
 	
 	-- Detach = ActionCloseTab + ActionOpenNewDoc
 	-- Attach = ActionCloseTab + ActionAttach
-	-- DetachAll = WinID + boolean
+	-- DetachAll = WinID + number
 	-- New document window = ActionOpenNewDoc
 	-- New viewer window = ActionOpenNewWin
 	-- Open/activate = ActionActivate
 	-- Open ReturnLink = No especial formula just open in desired way
 	
-	
-	set WinID to 25811
-	set TabID to 1
-	
 	tell application id "DNtp"
+		
+		
+		-- identify the record
 		try
-		if ReturnLink is "" then
-			set theRecord to content record of (tab id TabID) in (window id WinID)
-		else
-			set theRecord to get record with uuid theUUID
-		end if
-		
-		set theURL to the reference URL of theRecord
+			if theUUID is not "" then
+				set theRecord to get record with uuid theUUID
+			else
+				set theWin to window id WinID
+				set theTab to tab id TabID in theWin
+				set theRecord to content record of theTab
+			end if
+			-- get record URL
+			set theURL to the reference URL of theRecord
 		end try
-		-- close window, close tab, attach tab to window, open new doc window, open tab, open externally (the order of the sequence is relevant)
 		
-		if ActionCloseWin then close (window id WinID)
-		if ActionCloseTab then close theRecord
-		if ActionAttach is not "" then open tab for record theRecord in (window id ActionAttach)
-		if DetachAll then
+		
+		
+		
+		
+		-- close window
+		if ActionCloseWin is not 0 then close (window id WinID)
+		
+		-- close tab
+		if ActionCloseTab is not 0 then close theTab
+		
+		-- attach tab to window
+		if ActionAttach is not 0 then open tab for record theRecord in (window id ActionAttach)
+		
+		-- detach all tabs
+		if DetachAll is not 0 then
 			set theTabs to every tab in (window id WinID)
 			repeat with theTab in theTabs
 				set theRecord to content record of theTab
@@ -91,15 +149,25 @@ on run
 			end repeat
 		end if
 		
-		if ActionOpenNewDoc then open tab for record theRecord
-		if ActionOpenNewWin then open window for record theRecord
-		if ActionActivate then tell me to do shell script "open " & theURL
-		if ActionOpenEx then
-			set thePath to (path of theRecord as string)
-			do shell script "open " & quoted form of thePath
-		end if
-		if ActionRename is not "" then set the name of theRecord to ActionRename
+		-- open new document window
+		if ActionOpenNewDoc is not 0 then open tab for record theRecord
 		
+		-- open new viewer window
+		if ActionOpenNewWin is not 0 then open window for record theRecord
+		
+		-- activate record
+		if ActionActivate is not 0 then tell me to do shell script "open " & theURL
+		
+		-- open record externally
+		if ActionOpenEx is not 0 then
+			set thePath to (path of theRecord as string)
+			tell me to do shell script "open " & quoted form of thePath
+		end if
+		
+		-- data manipulation
+		-- rename record
+		if ActionRename is not "" then set the name of theRecord to ActionRename
+		if ActionAliases is not "" then set the name of theRecord to ActionAliases		
 		
 		
 	end tell
@@ -107,3 +175,6 @@ end run
 
 
 ```
+
+
+#Applescript #DEVONthink #Alfred

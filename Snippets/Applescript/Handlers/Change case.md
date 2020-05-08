@@ -29,3 +29,6 @@ on change_case(this_text, this_case)
 end change_case
 
 ```
+
+
+#Snippets #Applescript

@@ -1,10 +1,10 @@
 # Filter tabs in think windows (for Alfred Workflow)
 
 ```applescript
-use AppleScript version "2.4" -- Yosemite (10.10) or later
-use scripting additions
+-- Filter tabs in think windows (for Alfred Workflow)
 
 -- 2020-05-07-14-38-39
+-- 2020-05-07-23-44-00 - Added the index alongside the class of the window in the subtitles
 
 -- This script can collect: i. all tabs (in all windows) or ii. tabs in specific think window 
 -- if WinID is 0 → get tabs from all think windows
@@ -15,7 +15,7 @@ on run
 	global theWins, theWin, theTabs, theTab, WinID, TabID, theSubtitle, theName, theString, theStrings, CompleteString
 	
 	
-	set WinID to ((system attribute "WinID") as number)	
+	set WinID to ((system attribute "WinID") as number)
 	-- if this doesn't work, then other option is this:
 	--	try
 	--on error
@@ -44,7 +44,7 @@ on run
 					
 					set TabID to the id of theTab -- preparing the argument
 					set FullID to WinID & "," & TabID -- preparing the argument
-					set theSubtitle to "Select tab in " & class of theWin -- preparing the display info
+					set theSubtitle to "In " & (class of theWin) & space & (index of theWin) -- preparing the display info
 					set theName to name of content record in theTab -- preparing the display info
 					set theName to my replaceText(theName, "\"", "")
 					
@@ -65,7 +65,9 @@ on run
 		
 		set CompleteString to "{\"items\": [" & return & theStrings & "]}" -- adding the beggining and end of the string
 		set CompleteString to my replaceText(CompleteString, "," & return & "]}", return & "]}") -- removal of the very last comma
-
+		set CompleteString to my replaceText(CompleteString, "in document window", "IN DOC WINDOW")
+		set CompleteString to my replaceText(CompleteString, "viewer", "vi")
+		
 		return CompleteString
 		
 	end tell -- and everyone lived happily ever after
@@ -82,4 +84,8 @@ on replaceText(theString, old, new)
 	return theString
 end replaceText
 
+
 ```
+
+
+#Applescript #DEVONthink #Alfred
