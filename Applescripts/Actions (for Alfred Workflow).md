@@ -100,7 +100,7 @@ on run
 	end try
 	try -- change the aliases
 		set ActionAliases to ((system attribute "ActionAliases") as text) -- contains the new name
-	end try	
+	end try
 	
 	-- Detach = ActionCloseTab + ActionOpenNewDoc
 	-- Attach = ActionCloseTab + ActionAttach
@@ -167,7 +167,7 @@ on run
 		-- data manipulation
 		-- rename record
 		if ActionRename is not "" then set the name of theRecord to ActionRename
-		if ActionAliases is not "" then set the name of theRecord to ActionAliases		
+		if ActionAliases is not "" then set the aliases of theRecord to ActionAliases
 		
 		
 	end tell

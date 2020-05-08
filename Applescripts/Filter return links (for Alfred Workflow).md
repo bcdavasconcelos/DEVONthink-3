@@ -4,6 +4,7 @@
 ```applescript
 -- Retrieve return links (for Alfred Workflow)
 -- 2020-05-07-19-53-21
+-- 2020-05-08-15-40-09 Removed the `\"uid\": \"" & FullID & "\",` line so that DEVONthink manages the sort order and not Alfred.
 
 property theSubtitle : "Attach this record to think window"
 on run
@@ -45,7 +46,6 @@ on run
 			
 			
 			set theString to "{
-				      \"uid\": \"" & theUUID & "\",
 				        \"title\": \"" & theName & "\",
 				        \"subtitle\": \"" & theSubtitle & "\",
 				        \"arg\":  \"" & theURL & "\",
@@ -99,6 +99,7 @@ on trimtext(theText, theCharactersToTrim, theTrimDirection)
 	end if
 	return theText
 end trimtext
+
 
 ```
 

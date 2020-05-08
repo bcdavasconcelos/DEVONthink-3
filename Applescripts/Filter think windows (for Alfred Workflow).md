@@ -5,6 +5,7 @@
 -- Filter think windows (for Alfred Workflow)
 -- 2020-05-07-14-50-03
 -- 2020-05-07-23-53-04 Added the index alongside the class of the window in the subtitles
+-- 2020-05-08-15-40-09 Removed the `\"uid\": \"" & FullID & "\",` line so that DEVONthink manages the sort order and not Alfred.
 
 on run
 	
@@ -18,13 +19,13 @@ on run
 		repeat with theWin in theWins -- the loop
 			
 			set WinID to the id of theWin
-			set theSubtitle to (class of theWin as text) & space & (index of theWin) -- preparing the display info
+			set theSubtitle to (class of theWin as text)
 			set theName to name of theWin -- preparing the display info
 			if theSubtitle is "document window" then set the theName to my change_case(theName, "upper")
+			set theSubtitle to theSubtitle & space & (index of theWin) -- preparing the display info
 			set theName to my replaceText(theName, "\"", "")
 			
 			set theString to "{
-			     \"uid\": \"" & WinID & "\",
 			       \"title\": \"" & theName & "\",
 			       \"subtitle\": \"" & theSubtitle & "\",
 			       \"arg\":  \"" & WinID & "\"
@@ -79,6 +80,7 @@ on change_case(this_text, this_case)
 	end repeat
 	return the new_text
 end change_case
+
 
 
 ```
