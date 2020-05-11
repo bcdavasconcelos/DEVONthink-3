@@ -1,50 +1,33 @@
-# Filter think windows (for Alfred Workflow)
+# Script Filter: Databases
 
 ```applescript
-
--- Filter think windows (for Alfred Workflow)
--- 2020-05-07-14-50-03
--- 2020-05-07-23-53-04 Added the index alongside the class of the window in the subtitles
--- 2020-05-08-15-40-09 Removed the `\"uid\": \"" & FullID & "\",` line so that DEVONthink manages the sort order and not Alfred.
--- 2020-05-08-16-54-00 JSON Handler, changed theName to the class of theWin
+-- Filter open databases (for Alfred Workflow)
 
 on run
-	
-	global theWins, theWin, WinID, theName, theString, theStrings, CompleteString
 	
 	tell application id "DNtp"
 		
 		set theStrings to {}
-		set theWins to think windows -- get all viewer windows
+		set theDbs to get every database
 		
-		repeat with theWin in theWins -- the loop
-			
-			set theName to (class of theWin as text) & space & (index of theWin) -- preparing the display info
-			--	if theSubtitle is "document window" then set the theName to my change_case(theName, "upper")
-			
-			
-			set theSubtitle to name of theWin -- preparing the display info
-			set theSubtitle to my replaceText(theSubtitle, "\"", "")
-			
-			set theArg to (id of theWin)
+		repeat with theDb in theDbs
+
+			set theName to name of theDb
+			set theSubtitle to ""
+			set theArg to (uuid of theDb)
 			
 			set theString to my json_string(theName, theSubtitle, theArg)
 			set theStrings to theStrings & theString & return
-			
 		end repeat
 		
-		
 		set CompleteString to my complete_json_string(theStrings)
-		
-		set CompleteString to my replaceText(CompleteString, "document window", "doc win")
-		set CompleteString to my replaceText(CompleteString, "viewer window", "vi win")
 		
 		return CompleteString
 		
 		
 	end tell
 	
-end run
+end run -- thank god, I was getting tired
 
 
 on json_string(theName, theSubtitle, theArg)
@@ -62,6 +45,40 @@ on complete_json_string(theStrings)
 	set CompleteString to my replaceText(CompleteString, "," & return & "]}", return & "]}") -- removal of the very last comma
 end complete_json_string
 
+on json_with_theRecord(theRecord, theApp)
+	try
+		tell application id "DNtp"
+			set theName to name of theRecord -- preparing the display info
+			set theName to my replaceText(theName, "\"", "")
+			
+			set theSubtitle to "In " & theApp
+			
+			set theArg to the uuid of theRecord -- preparing the argument
+			
+			set theString to my json_string(theName, theSubtitle, theArg)
+			return theString
+		end tell
+	end try
+end json_with_theRecord
+
+on lookup_path(thePath)
+	tell application id "DNtp"
+		try
+			set theDatabases to databases
+			set theResults to {}
+			
+			repeat with thisDatabase in theDatabases
+				set thisDatabasesResults to lookup records with path thePath in thisDatabase
+				set theResults to theResults & thisDatabasesResults
+			end repeat
+			
+			set thePath to ""
+			set theRecord to item 1 of theResults
+			return theRecord
+			
+		end try
+	end tell
+end lookup_path
 
 on replaceText(theString, old, new)
 	set {TID, text item delimiters} to {text item delimiters, old}
@@ -92,11 +109,7 @@ on change_case(this_text, this_case)
 	end repeat
 	return the new_text
 end change_case
-
-
-
-
 ```
 
 
-#Applescript #DEVONthink #Alfred
+#Applescript #DEVONthink #Alfred #Script Filter#

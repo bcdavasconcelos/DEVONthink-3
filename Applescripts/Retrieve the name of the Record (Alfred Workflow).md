@@ -32,3 +32,6 @@ end run
 
 
 ```
+
+
+#Applescript #DEVONthink #Alfred
