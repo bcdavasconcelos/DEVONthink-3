@@ -1,4 +1,4 @@
-# Filter return links (for Alfred Workflow)
+# Script filter: Return links (for Alfred Workflow)
 
 
 ```applescript
@@ -117,4 +117,4 @@ end trimtext
 ```
 
 
-#Applescript #DEVONthink #Alfred
+#Applescript #DEVONthink #Alfred #Script Filter#

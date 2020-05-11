@@ -367,4 +367,4 @@ end front_testing
 ```
 
 
-#Applescript #DEVONthink #Alfred
+#Applescript #DEVONthink #Alfred #BBEdit

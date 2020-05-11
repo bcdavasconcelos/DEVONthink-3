@@ -1,4 +1,4 @@
-# Filter tabs in think windows (for Alfred Workflow)
+# Script filter: Tabs (for Alfred Workflow)
 
 ```applescript
 -- Filter tabs in think windows (for Alfred Workflow)
@@ -224,4 +224,4 @@ end change_case
 ```
 
 
-#Applescript #DEVONthink #Alfred
+#Applescript #DEVONthink #Alfred #BBEdit #Script Filter#
