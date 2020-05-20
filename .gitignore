@@ -1,3 +1,5 @@
 *.plist
 *.Ulysses-Group.plist
 .DS_Store
+
+*.Ulysses_Public_Filter
