@@ -2,15 +2,18 @@
 
 ```applescript
 
-
--- BCDAVASCONCELOS 2020-05-20-09-26-41
--- DT3 Versioning - Compare text
+-- BCDAVASCONCELOS 2020-05-22-09-58-27
+-- DT3 Versioning Restore
 
 tell application id "DNtp"
 	set theRecord to the (content record of think window 1)
 	
-	-- set d0 to get custom meta data for "d0" from theRecord default value "" as string
-	--	set myDateString0 to ("v0" & " " & (month of d0) & " " & (day of d0) & ", " & (year of d0) & " - " & (time string of d0)) as string
+	
+	set theOpts to {"Compare", "Restore", "Cancel"}
+	set theAnswer1 to the button returned of (display dialog "Hi, I am Hal. What can I do for you?" buttons theOpts default button 1)
+	
+	set d0 to get custom meta data for "d0" from theRecord default value "" as string
+	set myDateString0 to "v0 Template"
 	
 	try
 		set d1 to get custom meta data for "d1" from theRecord default value "" as string
@@ -76,9 +79,14 @@ tell application id "DNtp"
 	end try
 	
 	
-	set l to {myDateString1, myDateString2, myDateString3, myDateString4, myDateString5, myDateString6, myDateString7, myDateString8, myDateString9} as list
-	set theAnswer to (choose from list l with prompt {"OK"} default items "")
+	set l to {myDateString0, myDateString1, myDateString2, myDateString3, myDateString4, myDateString5, myDateString6, myDateString7, myDateString8, myDateString9} as list
+	set theAnswer to (choose from list l with prompt {"Wise decision. 
+Now, choose your destiny..."} default items "")
+	
 	set theAnswer to item 1 of theAnswer
+	if theAnswer contains "v0" then set theAnswer to "v0"
+	if theAnswer contains "v0" then set theTime to "Template"
+	
 	if theAnswer contains "v1" then set theAnswer to "v1"
 	if theAnswer contains "v1" then set theTime to "d1"
 	
@@ -112,25 +120,36 @@ tell application id "DNtp"
 	set theText to the plain text of theRecord
 	
 	set theText to get custom meta data for (theAnswer as text) from theRecord default value ""
-	set theTime to get custom meta data for (theTime as text) from theRecord default value ""
-	set theTime to ((year of theTime) & "-" & (month of theTime) & "-" & (day of theTime) & "-" & (time string of theTime)) as string
-	set theTime to my replaceText(theTime, ":", "-")
+	try
+		set theTime to get custom meta data for (theTime as text) from theRecord default value ""
+		set theTime to ((year of theTime) & "-" & (month of theTime) & "-" & (day of theTime) & "-" & (time string of theTime)) as string
+		set theTime to my replaceText(theTime, ":", "-")
+	on error
+		set theTime to "Template"
+	end try
 	--	set docName to theName & " " & theTime as text	
-	set docName to theTime as text
-	set _text to theText
 	
+	if theAnswer1 is "Restore" then
+		set the plain text of theRecord to theText
+		log message "Version restored" info (theAnswer as text) & " " & theTime as text
+	end if
 	
+	if theAnswer1 is "Compare" then
+		set docName to theTime as text
+		set _text to theText
+		tell application "BBEdit"
+			
+			set tempFilePath to (path to temporary items as text) & docName
+			set newDoc to make new document with properties {text:_text} initial save location tempFilePath
+			save newDoc
+			close newDoc
+			--	open newDoc
+			set theResult to compare file (thePath as POSIX file) against file (tempFilePath as alias)
+			activate
+		end tell
+	end if
 end tell
-tell application "BBEdit"
-	
-	set tempFilePath to (path to temporary items as text) & docName
-	set newDoc to make new document with properties {text:_text} initial save location tempFilePath
-	save newDoc
-	close newDoc
-	--	open newDoc
-	set theResult to compare file (thePath as POSIX file) against file (tempFilePath as alias)
-	activate
-end tell
+
 
 on replaceText(theString, old, new)
 	set {TID, text item delimiters} to {text item delimiters, old}

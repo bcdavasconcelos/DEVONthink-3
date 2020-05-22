@@ -7,7 +7,7 @@ tell application id "DNtp"
 	-- repeat with theRecord in theRecords
 	set theRecord to (content record of think window 1)
 	
-	set theText to the plain text of theRecord	
+	set theText to the plain text of theRecord
 	set theNewMod to the modification date of theRecord
 	
 	set theOldBackup to get custom meta data for "v9" from theRecord default value ""
@@ -67,8 +67,9 @@ tell application id "DNtp"
 	add custom meta data theNewMod for "d1" to theRecord
 	add custom meta data theText for "v1" to theRecord
 	
+	log message "New version saved" info "Saved at " & ((current date) as string) --
+	
 end tell
-
 
 ```
 
