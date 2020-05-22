@@ -1,4 +1,4 @@
-# Versioning - Save version
+# Snapshots - Save snapshot
 
 ```applescript
 

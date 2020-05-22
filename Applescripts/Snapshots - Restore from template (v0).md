@@ -1,4 +1,4 @@
-# Versioning - Restore from template (v0)
+# Snapshots - Restore from template (v0)
 
 ```applescript
 

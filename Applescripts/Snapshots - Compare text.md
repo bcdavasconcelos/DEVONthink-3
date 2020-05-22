@@ -1,4 +1,4 @@
-# Versioning - Compare text
+# Snapshots - Compare text
 
 ```applescript
 
