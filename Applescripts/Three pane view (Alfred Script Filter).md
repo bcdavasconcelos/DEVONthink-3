@@ -37,14 +37,14 @@ on json_string(theName, theSubtitle, theArg)
 					        \"title\": \"" & theName & "\",
 					        \"subtitle\": \"" & theSubtitle & "\",
 					        \"arg\":  \"" & theArg & "\",
-					        },"
+					        }," & linefeed
 	return theString
 end json_string
 
 on complete_json_string(theStrings)
 	set CompleteString to ""
 	set CompleteString to "{\"items\": [" & return & theStrings & "]}" -- adding the beggining and end of the string
-	set CompleteString to my replaceText(CompleteString, "," & return & "]}", return & "]}") -- removal of the very last comma
+	set CompleteString to my replaceText(CompleteString, "," & linefeed & "]}", linefeed & "]}") -- removal of the very last comma
 end complete_json_string
 
 on json_with_theRecord(theRecord, theApp)
