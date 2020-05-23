@@ -30,13 +30,10 @@ tell application id "DNtp" -- to get the ball rolling
 	set the plain text of theSource to theMainText
 	
 end tell
---- end performSmartRule
+
+-- end performSmartRule
 
 
-
-
-
--- handlers section
 on randomize_fn(theText)
 	set theText to my replaceText(theText, "[^1]", "[^" & (random number 100) & "]")
 	set theText to my replaceText(theText, "[^2]", "[^" & (random number 100) & "]")
@@ -163,10 +160,18 @@ on transclude(theMainText)
 					
 					set theText to my randomize_fn(theText)
 					
+					try
+						set theBL to get custom meta data for "v9" from theRecord default value ""
+					end try
+					if theBL is not {} then
+						set theBL to "<details class=\"ll\">
+							 <summary class=\"ll\">" & "Return links" & "</summary>" & linefeed & (theBL as text) & " " & linefeed & "</details>"
+					end if
+					
 					-- the text to be added via replace
 					set theRecordName to "[" & theRecordName & "]"
 					set theReplacement to "<!-- " & thePlaceHolder & " -->  " & linefeed & "<details class=\"l2\">
-	 <summary class=\"l2\">" & theRecordName & "</summary>" & linefeed & theText & "  " & linefeed & theURL & linefeed & linefeed & "&nbsp;" & linefeed & "</details>"
+	 <summary class=\"l2\">" & theRecordName & "</summary>" & linefeed & theText & "  " & linefeed & linefeed & theURL & linefeed & linefeed & theBL & linefeed & linefeed & "&nbsp;" & linefeed & "</details>"
 					
 					set theMainText to my replaceText(theMainText, thePlaceHolder, theReplacement)
 					
