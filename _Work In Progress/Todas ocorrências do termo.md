@@ -115,7 +115,7 @@ on run
 		--		
 		--set theList to my replaceText(theList, "\"" & return, "")
 		set theList to regex search theList search pattern "[" & return replace template "["
-		return theList as string
+		add custom meta data theList for "d9" to theRecord
 		
 		
 	end tell -- and everyone lived happily ever after
