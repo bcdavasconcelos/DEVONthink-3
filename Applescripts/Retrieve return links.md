@@ -6,7 +6,7 @@ This will find links leading to each selected note and add them to the `Return l
 use AppleScript version "2.4" -- Yosemite (10.10) or later
 use script "RegexAndStuffLib"
 use scripting additions
-property MainUUID : ""
+property MainUUID : "C02BC195-1E85-4364-B9E0-1CEF96CE7E96"
 
 on performSmartRule(theRecords)
 	tell application id "DNtp"
@@ -30,16 +30,20 @@ on performSmartRule(theRecords)
 			repeat with each in theRecs
 				
 				
-				set the end of theList to return & quoted form of (name of each & "<a href=\"" & reference URL of each & "?search=" & theShortName & "&reveal=1" & "\">" & "**" & "</a></br>")
+				set the end of theList to return & quoted form of ("<a id=" & name of each & "\" href=\"" & reference URL of each & "?search=" & theShortName & "&reveal=1" & "\">" & name of each & "</a></br>")
 				
 				
 			end repeat
 			
 			
 			-- Sort the list
-			set theList to my sortlist(theList)
 			
-			set theFinalList to "'<font size=\"5\" color=\"#8080BB\"><font face=\"Menlo\">'" & theList & "'</font></font>'"
+			considering numeric strings
+				set theList to my sortlist(theList)
+			end considering
+			
+			
+			set theFinalList to "'<font size=\"6\" color=\"#8080BB\"><font face=\"Consolas\">'" & theList & "'</font></font>'"
 			
 			-- Convert to RTF
 			set theRTF to (do shell script "echo " & theFinalList & " | textutil -stdin -stdout -inputencoding utf-8 -format html -convert rtf | pbcopy")
@@ -111,6 +115,7 @@ on sortlist(theList)
 	end repeat
 	return theSortedList
 end sortlist
+
 
 ```
 
