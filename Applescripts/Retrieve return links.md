@@ -1,6 +1,8 @@
 # Retrieve return links
-
 This will find links leading to each selected note and add them to the `Return links` custom metadata field. See [this thread][1] for a discussion.
+
+## Updates
+- 2020-05-24-13-17-38 Now that DT3 is displaying links properly in rtf text fields in the inspector while on in dark mode, the html before the conversion has been updated to turn the whole string into a link. Also, the sort list command is better now that it considers numeric strings (avoiding the issue of x10 being before x2).
 
 ```applescript
 use AppleScript version "2.4" -- Yosemite (10.10) or later
