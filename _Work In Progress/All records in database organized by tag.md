@@ -1,5 +1,5 @@
-# All records in database
-
+# All records in database organized by tag
+**Status:** *Nearly ready. I still need to adapt it so that is keeps updating the same record instead of creating a new one each time.*
 
 ```applescript
 

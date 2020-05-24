@@ -1,4 +1,8 @@
 # Retrieve aliases stored in the text
+**Status:** *Archived*
+- 2020-05-24-13-24-51: The last update (v. 3.5) rendered this script obsolete. (Even though it cannot properly find strings beginning with `@`)
+
+---- 
 
 I store the aliases of certain markdown files at the bottom of the text preceded by `@`. E.g. `@alias1, alias 2`. The smart-rule can be downloaded [here][1].
 

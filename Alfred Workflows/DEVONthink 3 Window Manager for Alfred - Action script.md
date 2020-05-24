@@ -1,43 +1,23 @@
-# Actions (for Alfred Workflow)
-
-## Variáveis
-```applescript
-
-WinID id
-TabID id
-ActionCloseWin boolean
-ActionCloseTab boolean
-ActionAttach id
-DetachAll boolean
-ActionOpenNewDoc boolean
-ActionOpenNewWin boolean
-ActionActivate boolean
-ActionOpenEx boolean
-ActionRename text
-ReturnLink text
-
-```
-
-```applescript
-WinID
-TabID
-ActionCloseWin
-ActionCloseTab
-ActionAttach
-DetachAll
-ActionOpenNewDoc
-ActionOpenNewWin
-ActionActivate
-ActionOpenEx
-ActionRename
-ReturnLink
-```
-
+# DEVONthink 3 Window Manager for Alfred - Action script
 
 ```applescript
 
 -- 2020-05-08-19-58-13 Added try before actions to prevent the script from stopping; avoided encoding error in renaming action by using the clipboard.
 -- 2020-05-08-19-07-05 Conditional to prevent accidental triggering of theUUID path
+
+-- WinID id
+-- TabID id
+-- ActionCloseWin boolean
+-- ActionCloseTab boolean
+-- ActionAttach id
+-- DetachAll boolean
+-- ActionOpenNewDoc boolean
+-- ActionOpenNewWin boolean
+-- ActionActivate boolean
+-- ActionOpenEx boolean
+-- ActionRename text
+-- ReturnLink text
+
 on run
 	
 	-- Identify the record

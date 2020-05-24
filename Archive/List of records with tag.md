@@ -1,7 +1,9 @@
 # List of records with tag
+**Status:** *Archived*.
+Already incorporated into *All record in database organized by tag*.
+
 
 ```applescript
-
 
 use AppleScript version "2.4" -- Yosemite (10.10) or later
 use script "RegexAndStuffLib"
