@@ -1,6 +1,6 @@
 # Retrieve Bekker numbering
 
-All of Aristotle's works are numbered according to the 1831 edition by german scholar Immanuel Bekker. This script will extract numbering matching the pattern `PAGE(1-1462) COLUMN(a|b) LINE (1-45)`, which translates into regex pattern `\d{1,4}[a|b]\d{1,2}`, and add them as aliases to the record. This is exceptionally useful if you are using automatic wiki links, as any occurrence of a reference will take you directly to the referenced work. For more information on this, see this thread [How I use Wiki-Links and Aliases (pt.2) ][1]. The smart-rule can be downloaded [here][2].
+All of Aristotle's works are numbered according to the 1831 edition by german scholar Immanuel Bekker. This script will extract numbering matching the pattern `PAGE(1-1462) COLUMN(a|b) LINE (1-45)`, which translates into regex pattern `\d{1,4}[a|b]\d{1,2}`, and add them as aliases to the record. This is exceptionally useful if you are using automatic wiki links, as any occurrence of a reference will take you directly to the referenced work. For more information on this, see this thread [How I use Wiki-Links and Aliases (pt.2) ](https://discourse.devontechnologies.com/t/how-i-use-wiki-links-and-aliases-pt-2/47873). The smart-rule can be downloaded [here](https://bcdav.blot.im/DT3-Smart-rules).
 
 ```applescript
 use AppleScript version "2.4" -- Yosemite (10.10) or later
@@ -37,7 +37,5 @@ end replaceText
 
 ```
 
-[1]:	https://discourse.devontechnologies.com/t/how-i-use-wiki-links-and-aliases-pt-2/47873
-[2]:	https://bcdav.blot.im/DT3-Smart-rules
 
 #Applescript #DEVONthink

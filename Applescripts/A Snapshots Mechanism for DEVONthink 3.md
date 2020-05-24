@@ -1,7 +1,115 @@
-# Snapshots - Compare text
+# A Snapshots Mechanism for DEVONthink 3
+
+## Warning
+1. **Do not use this as a backup mechanism.** These snapshots should be considered *a convenience*. It was not intended to protect from loss of data. There is no safety net here.
+2. These are **potentially destructive** scripts. **You cannot ⌘Z your way out of changes made by scripts.**
+3. Finally, this is intended for markdown and/or plain text **only**.
+
+***
+
+# The idea
+
+The idea is very simple. I created custom metadata fields to store snapshots of the text (**v1**-**v9**) and the modification time (**d1**-**d9**).
+
+
+![](https://github.com/bcdavasconcelos/DEVONthink-3/blob/master/Images/e8c780d43bb773c740d79ffbe2af2f5f0671fa4c.jpeg?raw=true)
+*I keep it at the bottom, so I don't see it if I don't want to.*
+
+
+# The first script: Save Snapshot
+
+The **first script** is for *storing the text*. It will store the current text in v1 and throw what was in v1 to v2, what was in v2 to v3 and so on. What was in v9 says goodbye.
 
 ```applescript
+tell application id "DNtp"
+	-- set theRecords to the selection
+	-- repeat with theRecord in theRecords
+	set theRecord to (content record of think window 1)
+	
+	set theText to the plain text of theRecord
+	set theNewMod to the modification date of theRecord
+	
+	set theOldBackup to get custom meta data for "v9" from theRecord default value ""
+	add custom meta data theOldBackup for "v10" to theRecord
+	
+	set theOldBackup to get custom meta data for "v8" from theRecord default value ""
+	add custom meta data theOldBackup for "v9" to theRecord
+	
+	set theOldBackup to get custom meta data for "v7" from theRecord default value ""
+	add custom meta data theOldBackup for "v8" to theRecord
+	
+	set theOldBackup to get custom meta data for "v6" from theRecord default value ""
+	add custom meta data theOldBackup for "v7" to theRecord
+	
+	set theOldBackup to get custom meta data for "v5" from theRecord default value ""
+	add custom meta data theOldBackup for "v6" to theRecord
+	
+	set theOldBackup to get custom meta data for "v4" from theRecord default value ""
+	add custom meta data theOldBackup for "v5" to theRecord
+	
+	set theOldBackup to get custom meta data for "v3" from theRecord default value ""
+	add custom meta data theOldBackup for "v4" to theRecord
+	
+	set theOldBackup to get custom meta data for "v2" from theRecord default value ""
+	add custom meta data theOldBackup for "v3" to theRecord
+	
+	set theOldBackup to get custom meta data for "v1" from theRecord default value ""
+	add custom meta data theOldBackup for "v2" to theRecord
+	
+	set theMod to get custom meta data for "v9" from theRecord default value ""
+	add custom meta data theMod for "v10" to theRecord
+	
+	set theMod to get custom meta data for "d8" from theRecord default value ""
+	add custom meta data theMod for "d9" to theRecord
+	
+	set theMod to get custom meta data for "d7" from theRecord default value ""
+	add custom meta data theMod for "d8" to theRecord
+	
+	set theMod to get custom meta data for "d6" from theRecord default value ""
+	add custom meta data theMod for "d7" to theRecord
+	
+	set theMod to get custom meta data for "d5" from theRecord default value ""
+	add custom meta data theMod for "d6" to theRecord
+	
+	set theMod to get custom meta data for "d4" from theRecord default value ""
+	add custom meta data theMod for "d5" to theRecord
+	
+	set theMod to get custom meta data for "d3" from theRecord default value ""
+	add custom meta data theMod for "d4" to theRecord
+	
+	set theMod to get custom meta data for "d2" from theRecord default value ""
+	add custom meta data theMod for "d3" to theRecord
+	
+	set theMod to get custom meta data for "d1" from theRecord default value ""
+	add custom meta data theMod for "d2" to theRecord
+	
+	add custom meta data theNewMod for "d1" to theRecord
+	add custom meta data theText for "v1" to theRecord
+	
+	log message "New version saved" info "Saved at " & ((current date) as string) --
+	
+end tell
 
+```
+
+***
+
+# The second script: Compare/Restore Snapshot
+
+The **second script** is for *restoring a snapshot*. When it is activated, it will ask whether you want to compare snapshots using BBEdit (could have used filemerge or something else, but I like BBEdit and you can install it for free) or simply restore to one of the previous snapshots.
+
+![](https://github.com/bcdavasconcelos/DEVONthink-3/blob/master/Images/2020-05-22_09-59-56.png?raw=true)
+
+The next dialog will prompt for the desired snapshot to be compared or restored.
+
+
+![](https://github.com/bcdavasconcelos/DEVONthink-3/blob/master/Images/2020-05-22_10-00-19.png?raw=true)
+
+If you chose to **restore**, that's it. The script will do so by replacing the text of the record by the stored snapshot and it will log the change in DEVONthink (I like how discrete the log is and prefer it over the notification function). If you chose to **compare** instead, you *can* make the changes you want and then *save*. 
+
+*Here is the compare window open in BBEdit.*  
+![](https://github.com/bcdavasconcelos/DEVONthink-3/blob/master/Images/2020-05-22_10-00-46.png?raw=true)
+```applescript
 -- BCDAVASCONCELOS 2020-05-22-09-58-27
 -- DT3 Versioning Restore
 
@@ -159,8 +267,30 @@ on replaceText(theString, old, new)
 	set text item delimiters to TID
 	return theString
 end replaceText
+```
+
+****
+
+## A third little script - Restore Directly to v0
+
+Side-note: I am also keeping a v0, which is sort of a template for the note and which won't be touched by the first script. I also set up a special shortcut to restore directly to this snapshot without any prompts. This will be the **third script**.
 
 
+```applescript
+tell application id "DNtp"
+	
+	set theRecord to (content record of think window 1)
+	set thePath to the path of theRecord -- Get the file path	
+	
+	set theText to the plain text of theRecord
+	
+	set theText to get custom meta data for "v0" from theRecord default value ""
+	
+	set the plain text of theRecord to theText
+	
+	log message "Version restored" info "Restored to template version " & ((current date) as string) --	
+	
+end tell
 ```
 
 
