@@ -1,4 +1,4 @@
-# Retrieve the name of the Record (Alfred Workflow)
+# DEVONthink 3 Window Manager for Alfred - Retrieve the name of the Record
 
 ```applescript
 

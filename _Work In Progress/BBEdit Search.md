@@ -1,4 +1,6 @@
 # BBEdit Search
+**Status:** *Beginning.*
+There is yet much to learn about scripting BBEdit.
 
 ```applescript
 tell application "BBEdit"

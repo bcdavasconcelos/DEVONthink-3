@@ -1,6 +1,6 @@
-# Every occurrence of theName of theRecord
-
-Problema: o alfred trunca/limita o tamanho do JSON que consegue processar. Quando as ocorrências são demais, o que é frequente, ele não processa.
+# Every occurrence of theName of theRecord for Alfred
+**Status:** *Abandoned*
+**Reason:** *Alfred can't handle it if the JSON string is excessively long. *
 
 ```applescript
 use AppleScript version "2.4" -- Yosemite (10.10) or later
