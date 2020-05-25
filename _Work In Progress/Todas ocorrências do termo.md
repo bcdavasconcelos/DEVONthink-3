@@ -1,6 +1,8 @@
 # Todas ocorrências do termo
 
 ```applescript
+# Todas ocorrências do termo
+
 -- Script filter: Return links (for Keyboard Maestro Macro)
 
 use AppleScript version "2.4" -- Yosemite (10.10) or later
@@ -49,7 +51,7 @@ on run
 			set theHeader to false
 			set theOccurrences to regex search theText search pattern "(\\s{0,1}.{0,40}" & theName & ".{0,50}\\s{0,1})" -- Padrão de busca
 			
-			if theOccurrences is not "" then -- se houver ocorrências...
+			if theOccurrences is not {} then -- se houver ocorrências...
 				
 				
 				repeat with theOccurrence in theOccurrences -- para cada uma...
@@ -114,8 +116,9 @@ on run
 		--set theList to my replaceText(theList, " ]" & return, "]")
 		--		
 		--set theList to my replaceText(theList, "\"" & return, "")
-		set theList to regex search theList search pattern "[" & return replace template "["
-		add custom meta data theList for "d9" to theRecord
+		--	set theList to regex search theList search pattern "[" & return replace template "["
+		set theList to (theList as text)
+		add custom meta data theList for "v9" to theRecord
 		
 		
 	end tell -- and everyone lived happily ever after
@@ -195,4 +198,6 @@ on strToList(thestr, d)
 	set text item delimiters to TID
 	return theList
 end strToList
+
+
 ```

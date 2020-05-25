@@ -1,4 +1,4 @@
-# Open frontmost document in DEVONthink (@find author)
+# Open apps frontmost document in DEVONthink
 
 ```applescript
 
@@ -367,4 +367,4 @@ end front_testing
 ```
 
 
-#Applescript #DEVONthink #Alfred #BBEdit
+#Applescript #DEVONthink

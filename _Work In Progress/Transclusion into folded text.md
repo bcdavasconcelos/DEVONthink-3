@@ -1,4 +1,6 @@
 # Transclusion into folded text
+**Status:** *Getting there...*
+- 2020-05-24-13-21-21: The `clean_trans_marks` routine still needs working.
 
 ```applescript
 

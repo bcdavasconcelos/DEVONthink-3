@@ -1,4 +1,4 @@
-# Script Filter: Databases
+# Alfred Script Filter: DEVONthink 3 Databases
 
 ```applescript
 -- Filter open databases (for Alfred Workflow)
