@@ -1,6 +1,6 @@
 # Compare text records with BBEdit
 
-For more information, see [this thread][1].
+For more information, see [this thread](https://discourse.devontechnologies.com/t/compare-text-files-with-bbedit/55183/2).
 
 ```applescript
 property err : " is not a plain text file." -- Just a default error message as a convenience
@@ -42,6 +42,34 @@ tell application "BBEdit"
 end tell
 ```
 
-[1]:	https://discourse.devontechnologies.com/t/compare-text-files-with-bbedit/55183/2
+
+```applescript
+
+tell application id "DNtp"
+	
+	set theRecords to the selection
+	set theRecord1 to item 1 of theRecords
+	set theRecord2 to item 2 of theRecords
+	
+	set thePath1 to the path of theRecord1
+	set thePath2 to the path of theRecord2
+	
+end tell
+tell application "Finder"
+	
+	set theFile1 to get POSIX file thePath1 as text
+	set theFile1 to theFile1 as alias
+	set theFile2 to get POSIX file thePath2 as text
+	set theFile2 to theFile2 as alias
+	
+end tell
+
+tell application "BBEdit"
+	set theResult to compare file theFile1 against file theFile2
+	activate
+end tell
+
+```
+
 
 #Applescript #DEVONthink #BBEdit
