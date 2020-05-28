@@ -1,6 +1,6 @@
 # Update placeholders in the body of the text
 
-**Warning:** *This will change the UUID of the record and by extension the reference URL.*
+**Warning:** *This will change the UUID of the record and by extension the reference URL.* 
 
 ```applescript
 -- Update placeholders in the record
