@@ -9,21 +9,24 @@ use AppleScript version "2.4" -- Yosemite (10.10) or later
 use script "RegexAndStuffLib"
 use scripting additions
 
-property ToClean : true
-property ToTransclude : true
+--  WARNING: USE ONLY ON DUMMY FILES UNTIL YOU UNDERSTAND HOW IT WORKS
 
-property IncludeBacklinks : true
-property Backlinks_Field : "v0"
+property IncludeBacklinks : true -- are you kidding?
+property Backlinks_Field : "v0" -- where are the backlinks stored?
 
 property PartialTransclusionAllowed : true
-property Clean_MMD_header : true
-property DepthOfTranclusion : 4
+property Clean_MMD_header : true -- if you use MMD metadata, it might me a good ideia to remove it. take a look at the handler in the very bottom of the script to add or remove fields.
+property Recursive : true -- false will cause it to run a single time, thus not transcluding placeholders found in the trancluded notes. It won't another level deeper, so to speak.
 
-property Last_Modification_Date : true
-property Add_toTop : false
+property Last_Modification_Date : true -- optional information about the transcluded note
+property Add_toTop : false -- optional shortcut to the top of the page
 
-property RandomizeFootnotes : true
-property NameBetweenBrackets : true
+property RandomizeFootnotes : true -- to avoid footnotes with the same ID after joining the notes.
+property NameBetweenBrackets : true -- with auto wiki links the name of the note will be a link. This causes a glitch in the <summmary> element. With brackets we prevent it from being a link.
+
+-- in case someone want to use it partially
+property ToClean : true -- erase comment tags <!-- {{note.md}} --> and transcluded text
+property ToTransclude : true -- change the placeholders for the text
 
 
 -- on performSmartRule(theRecords)
@@ -44,21 +47,26 @@ tell application id "DNtp" -- to get the ball rolling
 		
 		set thePlaceHolders to regex search theMainText search pattern "^\\{\\{(.+)\\.md\\}\\}"
 		
-		repeat until thePlaceHolders is {}
-			set theTurn to theTurn + 1
+		repeat until thePlaceHolders is {} -- this will make sure that we keep transcluding until there are no more placeholders left
+			set theTurn to theTurn + 1 -- so that we don't accidentaly add the delimiter in the wrong place. it should always be at the bottom of the first transcluded note, but not at the end of the subnotes.
+			
 			set theMainText to my transclude(theMainText, theDB, theTurn)
 			
+			-- now let us check if there are placeholders left that could have appeared after the transclusion above
 			set thePlaceHolders to regex search theMainText search pattern "^\\{\\{(.+)\\.md\\}\\}"
+			
+			if Recursive is false then set thePlaceHolders to {} -- no fun in this
 			
 		end repeat
 		
 	end if
 	
-	set theMainText to my replaceText(theMainText, linefeed & linefeed & linefeed, linefeed & linefeed)
+	set theMainText to my replaceText(theMainText, linefeed & linefeed & linefeed, linefeed & linefeed) -- This is cosmetic. I really don't like three linefeeds in sequence. I always find that two are enought to keep things organized. If change this, just bear in mind that the commented out placeholder cannot stay only one linefeed away from  text. 
 	
 	set the plain text of theSource to theMainText
-	
 	--	return theMainText
+	
+	log message "Transclusion successful" info "It was nothig short of a miracle that it didn't failed"
 	
 end tell
 -- end performSmartRule
@@ -66,7 +74,8 @@ end tell
 
 
 
------------- Handlers ------------
+------------ Handlers ------------ 
+-- a.k.a. where things go wrong
 
 
 on clean_trans_marks(theMainText)
@@ -83,7 +92,7 @@ on clean_trans_marks(theMainText)
 		set theSearchPattern to my replaceText(theSearchPattern, "}", "\\}")
 		set theSearchPattern to my replaceText(theSearchPattern, "|", "\\|")
 		
-		-- search pattern needs to include <!-- {{record.md}} --> plus everything until "&nbsp;"
+		-- search pattern needs to include <!-- {{record.md}} --> plus everything until the delimiter
 		set theSearchPattern to theSearchPattern & "(.|\\s)+?&nbsp;" & linefeed & "</details>"
 		
 		-- erase old transclusion and add back the original placeholder
@@ -96,8 +105,11 @@ end clean_trans_marks
 
 on transclude(theMainText, theDB, theTurn)
 	tell application id "DNtp"
+		
+		-- let us find all the placeholders
 		set thePlaceHolders to regex search theMainText search pattern "^\\{\\{(.+)\\.md\\}\\}"
 		
+		-- if we find something, let us transclude it
 		if thePlaceHolders is not {} then
 			repeat with thePlaceHolder in thePlaceHolders
 				
@@ -142,42 +154,42 @@ on transclude(theMainText, theDB, theTurn)
 					
 					if PartialTransclusionAllowed then
 						if theSectionName is not "" then -- if section name, then get section
-							set theText to my get_section(theText, theSectionName)
+							set theText to my get_section(theText, theSectionName) -- I made a special handler for getting just the section. It is still being tested. I hope it holds.
 						end if -- end theSectionName
 					end if
 					
 					
 					if Clean_MMD_header then set theText to my clean_mmd(theText) -- erase MMD metadata header that will not be transcluded 
 					
-					set theURL to the reference URL of theRecord
+					set theURL to the reference URL of theRecord -- we will add the url to the EDIT link in the bottom
 					
-					set myDateString to ""
+					set myDateString to "" -- let us get the modification date
 					if Last_Modification_Date then
 						set d1 to the modification date of theRecord
 						set myDateString to ((month of d1) & " " & (day of d1) & ", " & (year of d1) & " - " & (time string of d1)) as string
 						set myDateString to "Last modified: " & myDateString & "<br>"
 					end if
 					
-					set toTop to ""
+					set toTop to "" -- a handy link to navigate long files
 					if Add_toTop then set toTop to "<a href=\"#top\">[To top]</a> | "
 					
-					set theURL to "<small><div style=\"text-align: right\">" & myDateString & toTop & "<a href=\"" & theURL & "?reveal=1\">[Edit section]" & "</a></div></small>  " & linefeed
+					set theURL to "<small><div style=\"text-align: right\">" & myDateString & toTop & "<a href=\"" & theURL & "?reveal=1\">[Edit section]" & "</a></div></small>  " & linefeed -- these are the URLs on the bottom of the note
 					
 					if RandomizeFootnotes then set theText to my randomize_FN(theText)
 					
-					set theBL to ""
+					set theBL to "" -- this will work with my other script for getting occurrences of words and backlinks just make sure to input the correct metadata field name
 					if IncludeBacklinks then
 						try
 							set theBL to get custom meta data for Backlinks_Field from theRecord default value ""
 						end try
 					end if
 					
-					if theBL is not "" then
+					if theBL is not "" then -- the backlinks will appear folded at the bottom
 						set theBL to my clean_mmd(theBL)
-						set theBL to "<details class=\"backlinks\">" & linefeed & "<summary class=\"backlinks\">" & "Backlinks" & "</summary>" & linefeed & (theBL as text) & " " & linefeed & "</details>" & linefeed & linefeed
+						set theBL to "<details class=\"backlinks\">" & linefeed & "<summary class=\"backlinks\">" & "Backlinks" & "</summary>" & linefeed & (theBL as text) & " " & linefeed & "</details>" & linefeed & linefeed -- I made a special class so that the appearance of this particular item can be customised in the css
 					end if
 					
-					-- the text to be added via replace
+					-- now we will prepare the text to be added via replace
 					set theTaggedPlaceHolder to "<!-- " & thePlaceHolder & " -->  " & linefeed
 					
 					if NameBetweenBrackets then set theRecordName to "[" & theRecordName & "]"
@@ -186,18 +198,23 @@ on transclude(theMainText, theDB, theTurn)
 					
 					set theText to theText & "  " & linefeed
 					
+					----- DO NOT CHANGE THIS -----					
 					if theTurn = 1 then set theEndofString to "&nbsp;" & linefeed & "</details>"
 					if theTurn > 1 then set theEndofString to linefeed & "</details>"
 					
+					----- DO NOT CHANGE THIS -----
+					
+					-- this is the final product with the content of the note
 					set theReplacement to theTaggedPlaceHolder & linefeed & "<details>" & linefeed & theRecordName & linefeed & theText & linefeed & theURL & linefeed & theBL & theEndofString
 					
+					-- now we will replace the main text with it
 					set theMainText to my replaceText(theMainText, thePlaceHolder, theReplacement)
 					
-				end if -- end "if theRecords are not {}"
+				end if -- end if statement: "if theRecords are not {}"
 				
-			end repeat -- end "repeat with thePlaceHolder in thePlaceHolders"
+			end repeat -- end repeat statement: "repeat with thePlaceHolder in thePlaceHolders"
 			
-		end if -- end if thePlaceHolders is not {}
+		end if -- end if statement: thePlaceHolders is not {}
 		
 		
 		return theMainText
@@ -214,17 +231,6 @@ on get_section(theText, theSectionName)
 	set theText to theSectionText -- if section name, text will be just this section
 	return theText
 end get_section
-
-
-
-on clean_mmd(theText)
-	set theText to regex change theText search pattern "(title: .+)" replace template ""
-	set theText to regex change theText search pattern "(aliases: .+)" replace template ""
-	set theText to regex change theText search pattern "(tags: .+)" replace template ""
-	set theText to regex change theText search pattern "(.+)\\|\\|" replace template "" -- this one is for my own use case
-	return theText
-end clean_mmd
-
 
 
 on randomize_FN(theText)
@@ -260,6 +266,18 @@ on decoupe(t, d)
 	set AppleScript's text item delimiters to oTIDs
 	return l
 end decoupe
+
+
+-- ADJUST TO YOUR NEEDS
+on clean_mmd(theText)
+	set theText to regex change theText search pattern "(title: .+)" replace template ""
+	set theText to regex change theText search pattern "(aliases: .+)" replace template ""
+	set theText to regex change theText search pattern "(tags: .+)" replace template ""
+	set theText to regex change theText search pattern "(.+)\\|\\|" replace template "" -- this one is for my own use case
+	return theText
+end clean_mmd
+
+
 
 
 ```
