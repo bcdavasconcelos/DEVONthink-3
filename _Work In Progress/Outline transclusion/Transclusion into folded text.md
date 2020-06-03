@@ -1,4 +1,5 @@
 # Transclusion into folded text
+
 **Status:** *Finished*
 - 2020-05-24-13-21-21: The `clean_trans_marks` routine still needs working.
 - 2020-05-28-17-50-34: Finished. 
@@ -9,10 +10,12 @@ use AppleScript version "2.4" -- Yosemite (10.10) or later
 use script "RegexAndStuffLib"
 use scripting additions
 
+@bcdav - 2020-06-04-21-27-41
+
 --  WARNING: USE ONLY ON DUMMY FILES UNTIL YOU UNDERSTAND HOW IT WORKS
 
-property IncludeBacklinks : true -- are you kidding?
-property Backlinks_Field : "v0" -- where are the backlinks stored?
+-- property IncludeBacklinks : false -- are you kidding?
+-- property Backlinks_Field : "v0" -- where are the backlinks stored?
 
 property PartialTransclusionAllowed : true
 property Clean_MMD_header : true -- if you use MMD metadata, it might me a good ideia to remove it. take a look at the handler in the very bottom of the script to add or remove fields.
@@ -148,7 +151,7 @@ on transclude(theMainText, theDB, theTurn)
 				if theRecords is not {} then
 					
 					set theRecord to the item 1 of theRecords -- our record will be the first item of the search
-					
+					set theText to ""
 					set theText to the plain text of theRecord -- get text
 					
 					
@@ -178,16 +181,16 @@ on transclude(theMainText, theDB, theTurn)
 					if RandomizeFootnotes then set theText to my randomize_FN(theText)
 					
 					set theBL to "" -- this will work with my other script for getting occurrences of words and backlinks just make sure to input the correct metadata field name
-					if IncludeBacklinks then
-						try
-							set theBL to get custom meta data for Backlinks_Field from theRecord default value ""
-						end try
-					end if
-					
-					if theBL is not "" then -- the backlinks will appear folded at the bottom
-						set theBL to my clean_mmd(theBL)
-						set theBL to "<details class=\"backlinks\">" & linefeed & "<summary class=\"backlinks\">" & "Backlinks" & "</summary>" & linefeed & (theBL as text) & " " & linefeed & "</details>" & linefeed & linefeed -- I made a special class so that the appearance of this particular item can be customised in the css
-					end if
+					--if IncludeBacklinks then
+					--	try
+					--		set theBL to get custom meta data for Backlinks_Field from theRecord default value ""
+					--	end try
+					--end if
+					--					
+					--if theBL is not "" then -- the backlinks will appear folded at the bottom
+					--	set theBL to my clean_mmd(theBL)
+					--	set theBL to "<details class=\"backlinks\">" & linefeed & "<summary class=\"backlinks\">" & "Backlinks" & "</summary>" & linefeed & (theBL as text) & " " & linefeed & "</details>" & linefeed & linefeed -- I made a special class so that the appearance of this particular item can be customised in the css
+					--end if
 					
 					-- now we will prepare the text to be added via replace
 					set theTaggedPlaceHolder to "<!-- " & thePlaceHolder & " -->  " & linefeed
@@ -198,11 +201,11 @@ on transclude(theMainText, theDB, theTurn)
 					
 					set theText to theText & "  " & linefeed
 					
-					----- DO NOT CHANGE THIS -----					
+					----- ATTENTION HERE: These are the delimiters: change only if you know what you are doing 
 					if theTurn = 1 then set theEndofString to "&nbsp;" & linefeed & "</details>"
 					if theTurn > 1 then set theEndofString to linefeed & "</details>"
 					
-					----- DO NOT CHANGE THIS -----
+					----- END -----
 					
 					-- this is the final product with the content of the note
 					set theReplacement to theTaggedPlaceHolder & linefeed & "<details>" & linefeed & theRecordName & linefeed & theText & linefeed & theURL & linefeed & theBL & theEndofString
@@ -226,7 +229,8 @@ end transclude
 
 on get_section(theText, theSectionName)
 	set n to (count my decoupe(theSectionName, "#")) - 1 -- section level
-	set theSectionSearch to theSectionName & "((.|\\s)+)" & "(#{" & n & "}|&nbsp;|#{" & n - 1 & "})" -- section level search string
+	set m to (n - 1)
+	set theSectionSearch to theSectionName & "((.|\\s)+?)" & "(#{" & n & "}|&nbsp;|#{" & m & "})" -- section level search string
 	set theSectionText to regex search theText search pattern theSectionSearch replace template "$1" -- use regex to get it
 	set theText to theSectionText -- if section name, text will be just this section
 	return theText
@@ -273,9 +277,9 @@ on clean_mmd(theText)
 	set theText to regex change theText search pattern "(title: .+)" replace template ""
 	set theText to regex change theText search pattern "(aliases: .+)" replace template ""
 	set theText to regex change theText search pattern "(tags: .+)" replace template ""
-	set theText to regex change theText search pattern "(.+)\\|\\|" replace template "" -- this one is for my own use case
-	return theText
+	set theText to regex change theText search pattern "^(.+)\\|(.){3,25}" & linefeed replace template "" -- this one is for my own use case	return theText
 end clean_mmd
+
 
 
 
