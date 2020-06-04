@@ -6,11 +6,10 @@
 ```css
 
 details {
-	background: #3B3B3C;
-	border-left: 2px solid #5A5B5B;
 	margin: 1.5em 10px;
 	padding: 0.5em 30px;
 	position: relative;
+	border-left: 0.2px solid #5A5B5B;
 }
 
 details:before {
@@ -29,7 +28,6 @@ details p {
 summary {
     cursor: pointer;
     color: #646364;
-  	border-bottom: 2px solid #5A5B5B;
 /* 	background: #FBFAFA; */
  	font-weight: bold;
 }
@@ -38,7 +36,9 @@ summary:hover {
 }
 summary:focus { 
     outline: none;
+    color: #d1d0c7;
 	box-shadow: 0 0 0px;
+	border-bottom: 0px solid #5A5B5B;
 }
 summary::-webkit-details-marker {
     color: none;
@@ -54,36 +54,44 @@ summary.backlinks:before {
     font-size: 0.8em;
 }
 
+
 ```
 
 
-## Light 
+## Light
 
 ```css
 
 details {
-	padding-left: 20px;
-	padding-right: 20px;
-	border-left: 2px solid #D6D6D6;
+	background: #FBFAFA;
+	border-left: 0px solid #E3E4E6;
 	margin: 1.5em 10px;
 	padding: 0.5em 30px;
 	position: relative;
-    background-color: #EBEBEB;
- 	max-width: 1200px; 
+}
+
+details:before {
+	color: #BD5D29;
+	font-size: 4em;
+	line-height: 0.1em;
+	margin-right: 0.25em;
+	vertical-align: -0.4em;
+}
+details p {
+	color: #23384d;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	display: inline;
 }
 summary {
     cursor: pointer;
-/* 
     color: #E3E4E6;
-    background-color: #FEFEFE;
- */
+  	border-bottom: 0px solid #E3E4E6;
+/* 	background: #FBFAFA; */
  	font-weight: bold;
- 	color: #646364;
-  	border-bottom: 2px solid #D6D6D6;
 }
 summary:hover {
     color: #23394D;
-/*     background-color: #FBF2F2; */
 }
 summary:focus { 
     outline: none;
@@ -91,10 +99,8 @@ summary:focus {
 }
 summary::-webkit-details-marker {
     color: none;
-    background-color: none;
-}
-summary::-webkit-details-marker {
     display: none;
+    background-color: none;
 }
 summary:before {
     content: "◦";
@@ -104,6 +110,5 @@ summary.backlinks:before {
     content: "🕸"; 
     font-size: 0.8em;
 }
-
 
 ```
