@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>TextTransformComponents</key>
+	<array>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>, </string>
+				<key>SearchString</key>
+				<string>
+</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+	</array>
+	<key>TextTransformOptions</key>
+	<dict>
+		<key>SaveMode</key>
+		<string>ask </string>
+		<key>SearchRecursive</key>
+		<true/>
+		<key>TextFilesOnly</key>
+		<true/>
+	</dict>
+	<key>TextTransformSources</key>
+	<array>
+		<dict>
+			<key>SourceNodeData</key>
+			<string>x-bbedit-document:///untitled%20text%204?6</string>
+			<key>SourceNodeType</key>
+			<string>OpenDocument</string>
+		</dict>
+	</array>
+</dict>
+</plist>

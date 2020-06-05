@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>TextTransformComponents</key>
+	<array>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string> (page \1)</string>
+				<key>SearchString</key>
+				<string>\t#(.*?),.+</string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>](</string>
+				<key>SearchString</key>
+				<string>" (</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>[</string>
+				<key>SearchString</key>
+				<string>"</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string></string>
+				<key>SearchString</key>
+				<string>[\||\+|-]</string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>4 </string>
+				<key>SearchString</key>
+				<string>				</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>3 </string>
+				<key>SearchString</key>
+				<string>			</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>2 </string>
+				<key>SearchString</key>
+				<string>		</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>* </string>
+				<key>SearchString</key>
+				<string>	</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>    *</string>
+				<key>SearchString</key>
+				<string>^2</string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>        *</string>
+				<key>SearchString</key>
+				<string>^3</string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>            *</string>
+				<key>SearchString</key>
+				<string>^4</string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+	</array>
+	<key>TextTransformOptions</key>
+	<dict>
+		<key>SaveMode</key>
+		<string>ask </string>
+		<key>SearchRecursive</key>
+		<true/>
+		<key>TextFilesOnly</key>
+		<true/>
+	</dict>
+	<key>TextTransformSources</key>
+	<array>
+		<dict>
+			<key>SourceNodeData</key>
+			<string>x-bbedit-document:///untitled%20text%207?77</string>
+			<key>SourceNodeType</key>
+			<string>OpenDocument</string>
+		</dict>
+	</array>
+	<key>com.barebones.DocumentType</key>
+	<string>TextTransform</string>
+</dict>
+</plist>
