@@ -2,38 +2,111 @@
 
 
 ```applescript
--- bcdavasconcelos 2020-06-06-23-14-32
+-- bcdavasconcelos 
 -- Source: https://github.com/bcdavasconcelos/DEVONthink-3
 -- See also: https://discourse.devontechnologies.com/t/return-links-back-links/
 
 property UseAliases : true
-property AutoWiki_Links : true -- change to false for wiki links between double brackets, e.g. "[[link]]"
+property AutoWiki_Links : false -- change to false for wiki links between double brackets, e.g. "[[link]]"
 property theKind : "extension:md" -- the extension you will be looking for
 property theDelimiter : "#### Backlinks" -- Delimiter of choice. e.g. # Backlinks
 
-on performSmartRule(theSources)
-	tell application id "DNtp"
-		--	set theSources to selection
-		repeat with theSource in theSources
-			show progress indicator "Updating return links" with cancel button
-			
-			set theSearchString to my prepare_search_string(theSource)
-			set theList to my get_list(theSearchString)
-			set theText to my replace_section(theSource, theList)
-			set the plain text of theSource to theText
-			
-			hide progress indicator
-			
-			display notification "Hooray! Success!"
-			
-		end repeat
-	end tell
-end performSmartRule
 
-
+tell application id "DNtp"
+	set theSources to selection
+	repeat with theSource in theSources
+		show progress indicator "Updating return links" with cancel button
+		
+		set theList to my get_list(theSource)
+		set theText to my replace_section(theSource, theList)
+		set the plain text of theSource to theText
+		
+		hide progress indicator
+		
+		display notification "Hooray! Success!"
+		
+	end repeat
+end tell
 
 
 -- Handlers section
+on get_list(theSource)
+	tell application id "DNtp"
+		set theName to name of theSource
+		set theNameString to "\"" & theName & "\""
+		set theDB to the name of current database
+		
+		set theAliases to ""
+		if UseAliases then set theAliases to aliases of theSource
+		if theAliases is not "" then
+			set theAliasesString to my trimtext(theAliases, ", ", "end")
+			set theAliasesString to my trimtext(theAliases, " ", "end")
+			set theAliasesString to my replaceText(theAliasesString, ", ", "\") OR (\"")
+			set theSearchString to theNameString & " OR " & "(\"" & theAliasesString & "\")"
+		end if
+		if theAliases is "" then
+			set theSearchString to theNameString
+		end if
+		
+		set theSearchString to "name!=" & theName & " content: " & theSearchString & space & theKind
+		
+		set theList to {}
+		set theRecords to search theSearchString
+		repeat with theRecord in theRecords
+			
+			set theRecordName to (name of theRecord) as text
+			step progress indicator theRecordName
+			
+			if AutoWiki_Links is false then
+				set theText to the plain text of theRecord
+				if theText contains "[[" & theName & "]]" then
+					set the end of theList to "[[" & theRecordName & "]] | "
+				else if theText does not contain "[[" & theRecordName & "]]" then
+					set the end of theList to ""
+				end if
+			end if
+			
+			if AutoWiki_Links is true then set the end of theList to theRecordName & " | "
+			
+		end repeat
+		
+		set theList to my sortlist(theList)
+		return theList
+		
+	end tell
+end get_list
+
+
+on replace_section(theSource, theList)
+	tell application id "DNtp"
+		
+		set theText to plain text of theSource
+		
+		try
+			set OldDelimiter to AppleScript's text item delimiters
+			set AppleScript's text item delimiters to theDelimiter
+			set theDelimitedList to every text item of theText
+			set AppleScript's text item delimiters to OldDelimiter
+		on error
+			set AppleScript's text item delimiters to OldDelimiter
+		end try
+		
+		try
+			set theText to item 1 of theDelimitedList
+			set theText to my trimtext(theText, linefeed, "end")
+			
+			set theText to theText & linefeed & linefeed & theDelimiter & linefeed & linefeed & theList as text
+			
+			return theText
+		end try
+	end tell
+end replace_section
+
+
+
+
+
+
 on replaceText(theString, old, new)
 	set {TID, text item delimiters} to {text item delimiters, old}
 	set theStringItems to text items of theString
@@ -91,77 +164,8 @@ on sortlist(theList)
 	return theSortedList
 end sortlist
 
-on prepare_search_string(theSource)
-	tell application id "DNtp"
-		set theName to name of theSource
-		set theNameString to "\"" & theName & "\""
-		set theDB to the name of current database
-		
-		set theAliases to ""
-		if UseAliases then set theAliases to aliases of theSource
-		if theAliases is not "" then
-			set theAliasesString to my trimtext(theAliases, ", ", "end")
-			set theAliasesString to my trimtext(theAliases, " ", "end")
-			set theAliasesString to my replaceText(theAliasesString, ", ", "\") OR (\"")
-			set theSearchString to theNameString & " OR " & "(\"" & theAliasesString & "\")"
-		end if
-		if theAliases is "" then
-			set theSearchString to theNameString
-		end if
-		
-		set theSearchString to "name!=" & theName & " content: " & theSearchString & space & theKind
-		
-		return theSearchString
-		
-	end tell
-end prepare_search_string
-
-on get_list(theSearchString)
-	tell application id "DNtp"
-		
-		set theList to {}
-		set theRecords to search theSearchString
-		repeat with theRecord in theRecords
-			
-			set theName to (name of theRecord) as text
-			step progress indicator theName
-			
-			if AutoWiki_Links then set the end of theList to theName & " | "
-			if AutoWiki_Links is false then set the end of theList to "[[" & theName & "]] | "
-			
-		end repeat
-		
-		set theList to my sortlist(theList)
-		return theList
-		
-	end tell
-end get_list
-
-on replace_section(theSource, theList)
-	tell application id "DNtp"
-		
-		set theText to plain text of theSource
-		
-		try
-			set OldDelimiter to AppleScript's text item delimiters
-			set AppleScript's text item delimiters to theDelimiter
-			set theDelimitedList to every text item of theText
-			set AppleScript's text item delimiters to OldDelimiter
-		on error
-			set AppleScript's text item delimiters to OldDelimiter
-		end try
-		
-		try
-			set theText to item 1 of theDelimitedList
-			set theText to my trimtext(theText, linefeed, "end")
-			
-			set theText to theText & linefeed & linefeed & theDelimiter & linefeed & linefeed & theList as text
-			
-			return theText
-		end try
-	end tell
-end replace_section
-
+-- 2020-06-06-23-14-32 first version
+-- 2020-06-07-20-50-57 fixed "AutoWiki_Links false" not finding any matches
 
 
 ```
