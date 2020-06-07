@@ -12,9 +12,14 @@ property theKind : "extension:md" -- the extension you will be looking for
 property theDelimiter : "#### Backlinks" -- Delimiter of choice. e.g. # Backlinks
 
 
+<<<<<<< HEAD
 on performSmartRule(theSources)
 tell application id "DNtp"
 --	set theSources to selection
+=======
+tell application id "DNtp"
+	set theSources to selection
+>>>>>>> master
 	repeat with theSource in theSources
 		show progress indicator "Updating return links" with cancel button
 		
@@ -28,7 +33,11 @@ tell application id "DNtp"
 		
 	end repeat
 end tell
+<<<<<<< HEAD
 end performSmartRule
+=======
+
+>>>>>>> master
 
 -- Handlers section
 on get_list(theSource)
@@ -74,8 +83,42 @@ on get_list(theSource)
 		set theList to my sortlist(theList)
 		return theList
 		
+<<<<<<< HEAD
 	end tell
 end get_list
+=======
+	end tell
+end get_list
+
+
+on replace_section(theSource, theList)
+	tell application id "DNtp"
+		
+		set theText to plain text of theSource
+		
+		try
+			set OldDelimiter to AppleScript's text item delimiters
+			set AppleScript's text item delimiters to theDelimiter
+			set theDelimitedList to every text item of theText
+			set AppleScript's text item delimiters to OldDelimiter
+		on error
+			set AppleScript's text item delimiters to OldDelimiter
+		end try
+		
+		try
+			set theText to item 1 of theDelimitedList
+			set theText to my trimtext(theText, linefeed, "end")
+			
+			set theText to theText & linefeed & linefeed & theDelimiter & linefeed & linefeed & theList as text
+			
+			return theText
+		end try
+	end tell
+end replace_section
+
+
+
+>>>>>>> master
 
 
 on replace_section(theSource, theList)
