@@ -1,45 +1,39 @@
-# Retrieve return links
-This will find links leading to each selected note and add them to the `Return links` custom metadata field. See [this thread](https://discourse.devontechnologies.com/t/return-links-back-links/54390?u=bernardo_v) for a discussion.
+# Retrieve return links C
 
-## Updates
-- 2020-05-24-13-17-38 Now that DT3 is displaying links properly in rtf text fields in the inspector while on in dark mode, the html before the conversion has been updated to turn the whole string into a link. Also, the sort list command is better now that it considers numeric strings (avoiding the issue of x10 being before x2).
 
 ```applescript
-use AppleScript version "2.4" -- Yosemite (10.10) or later
-use scripting additions
+-- bcdavasconcelos 2020-06-06-23-14-32
+-- Source: https://github.com/bcdavasconcelos/DEVONthink-3
+-- See also: https://discourse.devontechnologies.com/t/return-links-back-links/
 
 property UseAliases : true
---property theFont : "Source Sans Pro"
-property theFont : "Garamond Premier Pro"
-property MDField : "returnlinks"
+property AutoWiki_Links : true -- change to false for wiki links between double brackets, e.g. "[[link]]"
+property theKind : "extension:md" -- the extension you will be looking for
+property theDelimiter : "#### Backlinks" -- Delimiter of choice. e.g. # Backlinks
 
 on performSmartRule(theSources)
 	tell application id "DNtp"
-		show progress indicator "Updating return links"
-		--	set theSources to the selection
+		--	set theSources to selection
 		repeat with theSource in theSources
+			show progress indicator "Updating return links" with cancel button
 			
 			set theSearchString to my prepare_search_string(theSource)
-			set theName to name of theSource
-			try
-				set theShortName to texts 1 through 4 of theName
-			on error
-				set theShortName to texts 1 through 3 of theName
-			end try
-			set theShortName to my replaceText(theShortName, " ", "%20")
-			set theList to my get_list(theSearchString, theShortName)
-			set theResult to my print_to_DT(theList, theSource)
+			set theList to my get_list(theSearchString)
+			set theText to my replace_section(theSource, theList)
+			set the plain text of theSource to theText
 			
+			hide progress indicator
+			
+			display notification "Hooray! Success!"
 			
 		end repeat
-		hide progress indicator
-		display notification "return links updated"
-		
 	end tell
 end performSmartRule
 
--- Handlers section
 
+
+
+-- Handlers section
 on replaceText(theString, old, new)
 	set {TID, text item delimiters} to {text item delimiters, old}
 	set theStringItems to text items of theString
@@ -100,8 +94,9 @@ end sortlist
 on prepare_search_string(theSource)
 	tell application id "DNtp"
 		set theName to name of theSource
-		set theNameString to "(\"" & theName & "\")"
+		set theNameString to "\"" & theName & "\""
 		set theDB to the name of current database
+		
 		set theAliases to ""
 		if UseAliases then set theAliases to aliases of theSource
 		if theAliases is not "" then
@@ -114,52 +109,59 @@ on prepare_search_string(theSource)
 			set theSearchString to theNameString
 		end if
 		
-		set theSearchString to "name!=" & theName & " content: " & theSearchString & space & "kind: markdown"
+		set theSearchString to "name!=" & theName & " content: " & theSearchString & space & theKind
 		
 		return theSearchString
+		
 	end tell
 end prepare_search_string
 
-on get_list(theSearchString, theShortName)
+on get_list(theSearchString)
 	tell application id "DNtp"
 		
-		set theRecords to search theSearchString in current database
-		set theNR to count theRecords
-		--	log message "Found " & theNR & " return links to the record"
-		
 		set theList to {}
-		repeat with each in theRecords
+		set theRecords to search theSearchString
+		repeat with theRecord in theRecords
 			
-			set the end of theList to return & quoted form of ("<a id=" & name of each & "\" href=\"" & reference URL of each & "?search=" & theShortName & "&reveal=1" & "\">" & name of each & "</a></br>")
+			set theName to (name of theRecord) as text
+			step progress indicator theName
 			
+			if AutoWiki_Links then set the end of theList to theName & " | "
+			if AutoWiki_Links is false then set the end of theList to "[[" & theName & "]] | "
 			
 		end repeat
 		
-		considering numeric strings
-			set theList to my sortlist(theList)
-		end considering
-		
+		set theList to my sortlist(theList)
 		return theList
 		
 	end tell
 end get_list
 
-on print_to_DT(theList, theSource)
+on replace_section(theSource, theList)
 	tell application id "DNtp"
 		
-		set theList to "'<font size=\"6\" color=\"#8080BB\"><font face=\"" & theFont & "\">'" & theList & "'</font></font>'"
+		set theText to plain text of theSource
 		
-		-- Convert to RTF
-		set theRTF to (do shell script "echo " & theList & " | textutil -stdin -stdout -inputencoding utf-8 -format html -convert rtf | pbcopy")
-		set theRTF to the clipboard
-		set theRTF to «class RTF » of theRTF
-		add custom meta data theRTF for MDField to theSource
+		try
+			set OldDelimiter to AppleScript's text item delimiters
+			set AppleScript's text item delimiters to theDelimiter
+			set theDelimitedList to every text item of theText
+			set AppleScript's text item delimiters to OldDelimiter
+		on error
+			set AppleScript's text item delimiters to OldDelimiter
+		end try
 		
+		try
+			set theText to item 1 of theDelimitedList
+			set theText to my trimtext(theText, linefeed, "end")
+			
+			set theText to theText & linefeed & linefeed & theDelimiter & linefeed & linefeed & theList as text
+			
+			return theText
+		end try
 	end tell
-end print_to_DT
+end replace_section
+
 
 
 ```
-
-
-#Applescript #DEVONthink
