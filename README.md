@@ -7,4 +7,4 @@ For many applescripts, you will need the script RegexAndStuffLib ([available her
 
 
 [![](https://www.dropbox.com/s/3nncdc7a6sfwbhn/api.jpeg?raw=1)](https://www.buymeacoffee.com/bcdavasconcelos)  
-[Buying me a coffee](https://www.buymeacoffee.com/bcdavasconcelos)
+[Buy me a coffee](https://www.buymeacoffee.com/bcdavasconcelos)
