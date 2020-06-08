@@ -7,25 +7,39 @@ use AppleScript version "2.4" -- Yosemite (10.10) or later
 use script "RegexAndStuffLib"
 use scripting additions
 
--- property thePattern : "(\\d{1,3} (U\\.S\\.|S\\. ?Ct\\.|F\\.[23]?d?|F\\. ?App\\'?x|F\\. ?Supp\\. ?2?d?) \\d{1,3} \\(\\d{4}\\))|[1290]\\d{2} (WL|LEXIS) \\d{5,6}"
 property thePattern : "ISBN (.+)"
+property thePattern2 : "DOI (.+)"
 property theMDField : "is?n"
+property theMDField2 : "doi"
 
-tell application id "DNtp"
-	-- set theRecords to the selection
-	-- repeat with theRecord in theRecords
-	
-	set theRecord to (content record of think window 1)
-	set theText to the plain text of theRecord
-	set theISBN to regex search once theText search pattern thePattern replace template "$1"
-	add custom meta data theISBN for theMDField to theRecord
-	
-	
-	tell application "Bookends"
-		set pubList to quick add {theISBN}
+on performSmartRule(theRecords)
+	tell application id "DNtp"
+		--		set theRecord to (content record of think window 1)
+		repeat with theRecord in theRecords
+			
+			set theName to the name of theRecord
+			set theText to the plain text of theRecord
+			set theISBN to ""
+			set theDOI to ""
+			
+			set theISBN to regex search once theText search pattern thePattern replace template "$1"
+			set theDOI to regex search once theText search pattern thePattern2 replace template "$1"
+			
+			add custom meta data theISBN for theMDField to theRecord
+			add custom meta data theDOI for theMDField2 to theRecord
+			
+			
+			tell application "Bookends"
+				if theDOI is not "" then set pubList to quick add {theDOI}
+				
+				if theDOI is "" then
+					if theISBN is not "" then set pubList to quick add {theISBN}
+				end if
+			end tell
+			
+		end repeat
 	end tell
-	
-end tell
+end performSmartRule
 
 
 
