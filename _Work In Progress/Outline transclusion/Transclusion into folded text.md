@@ -10,7 +10,7 @@ use AppleScript version "2.4" -- Yosemite (10.10) or later
 use script "RegexAndStuffLib"
 use scripting additions
 
-@bcdav - 2020-06-04-21-27-41
+-- @bcdav - 2020-06-04-21-27-41
 
 --  WARNING: USE ONLY ON DUMMY FILES UNTIL YOU UNDERSTAND HOW IT WORKS
 
