@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>TextTransformComponents</key>
+	<array>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>\n\n</string>
+				<key>SearchString</key>
+				<string>(\n\s*){3,6}</string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+	</array>
+	<key>TextTransformOptions</key>
+	<dict>
+		<key>SaveMode</key>
+		<string>ask </string>
+		<key>SearchRecursive</key>
+		<true/>
+		<key>TextFilesOnly</key>
+		<true/>
+	</dict>
+	<key>TextTransformSources</key>
+	<array/>
+	<key>com.barebones.DocumentType</key>
+	<string>TextTransform</string>
+</dict>
+</plist>

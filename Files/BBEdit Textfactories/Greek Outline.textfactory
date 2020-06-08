@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>TextTransformComponents</key>
+	<array>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>; 
+* </string>
+				<key>SearchString</key>
+				<string>; </string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>.
+* </string>
+				<key>SearchString</key>
+				<string>. </string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>, \n* </string>
+				<key>SearchString</key>
+				<string>, </string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>· \n* </string>
+				<key>SearchString</key>
+				<string>· </string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>
+* ἡ μὲν</string>
+				<key>SearchString</key>
+				<string>ἡ μὲν</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>
+* ἡ δὲ</string>
+				<key>SearchString</key>
+				<string>ἡ δὲ</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>
+* Ὅτι</string>
+				<key>SearchString</key>
+				<string>Ὅτι</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>  
+* ὥστε </string>
+				<key>SearchString</key>
+				<string>ὥστε </string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>  
+* ἀλλὰ </string>
+				<key>SearchString</key>
+				<string>ἀλλὰ </string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>
+* τὸ μὲν</string>
+				<key>SearchString</key>
+				<string>τὸ μὲν</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>
+* τὰ μὲν</string>
+				<key>SearchString</key>
+				<string>τὰ μὲν</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>
+* τὸ δὲ</string>
+				<key>SearchString</key>
+				<string>τὸ δὲ</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>
+* τὸ δὲ</string>
+				<key>SearchString</key>
+				<string>τὸ δὲ</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>* \1 </string>
+				<key>SearchString</key>
+				<string>([ἐπεί|ὅτε|ὅτι|ὡς])</string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+			<key>Disabled</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string></string>
+				<key>SearchString</key>
+				<string>([ἀλλ'|ὥστ|ἀλλά|ἄν|ἄρ|ἄρ'|ἄρα|ἀτάρ|αὐτάρ|ἄχρι|γάρ|δ'|δέ|δή|διό|διότι|ἐάν|εἰ|εἴ|εἰκ|εἵνεκ'|εἵνεκα|εἷος|εἴπερ|εἴτε|ἕνεκ'|ἕνεκα|ἐπεί|ἐπειδή|ἐπήν|ἕως|ἢ|ἤ|ἦ|ἠδ'|ἠδέ|ἠέ|ἦε|ἠμέν|ἤν|ἧος|ἤτοι|θ'|ἰδέ|ἵν'|ἵνα|καί|καίπερ|κᾷτα|μέχρι|μέχρις|μηδ'|μηδέ|μήποτε|μήτ'|μήτε|ὁπότ'|ὁπόταν|ὅππως|ὅπως|ὅταν|ὅτι|ὅττι|οὐδ'|οὐδέ|οὔθ'|οὐκοῦν|οὕνεκ'|οὕνεκα|ὄφρ'|ὄφρα|πάρος|πλήν|πρίν|ῥ'|ῥά|ῥα|τ'|τέ|τε|τώ|τῶ|τῷ|ὡς|ὥστε|γὰρ|οἷον|ἀλλὰ|μὲν|δὲ|ἔτι])</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+			<key>Disabled</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>
+* τὸ δὲ δὴ</string>
+				<key>SearchString</key>
+				<string>τὸ δὲ δὴ</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>
+* </string>
+				<key>SearchString</key>
+				<string>
+*   
+* </string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>
+* </string>
+				<key>SearchString</key>
+				<string> 
+*   
+* </string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>
+* </string>
+				<key>SearchString</key>
+				<string>
+* 
+</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string></string>
+				<key>SearchString</key>
+				<string>
+* * **</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>
+* </string>
+				<key>SearchString</key>
+				<string> 
+* * </string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>MatchSubPatternType</key>
+				<string>EntireSearchPattern</string>
+				<key>ProcessDuplicateLines_DeleteDuplicateLines</key>
+				<true/>
+				<key>ReplaceString</key>
+				<string>
+</string>
+				<key>SearchString</key>
+				<string>
+
+</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+	</array>
+	<key>TextTransformOptions</key>
+	<dict>
+		<key>SaveMode</key>
+		<string>ask </string>
+		<key>SearchRecursive</key>
+		<true/>
+		<key>TextFilesOnly</key>
+		<true/>
+	</dict>
+	<key>TextTransformSources</key>
+	<array/>
+	<key>com.barebones.DocumentType</key>
+	<string>TextTransform</string>
+</dict>
+</plist>

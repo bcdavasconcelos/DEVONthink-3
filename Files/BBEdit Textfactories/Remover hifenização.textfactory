@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>TextTransformComponents</key>
+	<array>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>\1  \n\n\2</string>
+				<key>SearchString</key>
+				<string>([\.|\;|·])\s*$\n(.{2,9}\s[Α-ΩἉἙἩἹὉὩὙἌἜἬἼὌὬἍἝἭἽὍὭὝἊἚἪἺὊὬἋἛἫἻὋὫὛἘἈἸὈ᾽ΥὨΦΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΦΧΨ])</string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>%%</string>
+				<key>SearchString</key>
+				<string>
+
+</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>\1</string>
+				<key>SearchString</key>
+				<string>\((§\d*)\)</string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+			<key>Disabled</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string> \1 </string>
+				<key>SearchString</key>
+				<string>\s*\t*\n\s*\t*\* (\d*[a|b]\d\d) </string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+			<key>Disabled</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string> \1 </string>
+				<key>SearchString</key>
+				<string>\s*\t*\n\s*\t*(\d*[a|b]\d\d) </string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+			<key>Disabled</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>\2 \1</string>
+				<key>SearchString</key>
+				<string>–\s*(\d*[a|b]\d*) (\p{Greek}+)</string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>\1\n\2</string>
+				<key>SearchString</key>
+				<string>(^.*?)(\d+[a|b]\d\d)</string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>  \n  \n\1</string>
+				<key>SearchString</key>
+				<string>(§\d{1,2})</string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+			<key>Disabled</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>  \n\n</string>
+				<key>SearchString</key>
+				<string>\s*\n\s*\n\s*\n\s*\n</string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+			<key>Disabled</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>\1 \2</string>
+				<key>SearchString</key>
+				<string>(\p{Greek}+.+?)\n(\d*[a|b]\d\d)</string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+			<key>Disabled</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>\1 \2</string>
+				<key>SearchString</key>
+				<string>(§\d*) \n(\d*[a|b]\d\d)</string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+			<key>Disabled</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string> </string>
+				<key>SearchString</key>
+				<string>  </string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>CaseSensitive</key>
+				<false/>
+				<key>ReplaceString</key>
+				<string>  
+</string>
+				<key>SearchString</key>
+				<string>
+</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+			<key>Disabled</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>&gt; \1 </string>
+				<key>SearchString</key>
+				<string>&gt;   \n(\d*[a|b]\d\d) </string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+			<key>Disabled</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>\1 \2</string>
+				<key>SearchString</key>
+				<string>(\d*[a|b]\d\d)\s*\(\s*\n\s*\n(§\d*)\)</string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+			<key>Disabled</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string> </string>
+				<key>SearchString</key>
+				<string>   \n\(   \n   \n§\d*\) </string>
+				<key>UseGrep</key>
+				<true/>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+			<key>Disabled</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>ComponentArguments</key>
+			<dict>
+				<key>ReplaceString</key>
+				<string>
+
+</string>
+				<key>SearchString</key>
+				<string>%%</string>
+			</dict>
+			<key>ComponentName</key>
+			<string>ReplaceAll</string>
+		</dict>
+	</array>
+	<key>TextTransformOptions</key>
+	<dict>
+		<key>SaveMode</key>
+		<string>ask </string>
+		<key>SearchRecursive</key>
+		<true/>
+		<key>TextFilesOnly</key>
+		<true/>
+	</dict>
+	<key>TextTransformSources</key>
+	<array>
+		<dict>
+			<key>SourceNodeData</key>
+			<string>x-bbedit-document:///untitled%20text%2014?61</string>
+			<key>SourceNodeType</key>
+			<string>OpenDocument</string>
+		</dict>
+	</array>
+	<key>com.barebones.DocumentType</key>
+	<string>TextTransform</string>
+</dict>
+</plist>
