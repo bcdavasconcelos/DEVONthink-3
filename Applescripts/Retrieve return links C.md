@@ -192,5 +192,4 @@ end removeDuplicateRecords
 -- 2020-06-07-20-50-57 fixed "AutoWiki_Links false" not finding any matches
 -- 2020-06-09-00-10-07 added "limit"; changed "step progress indicator"; "considering numeric string", remove duplicates.
 
-
 ```
