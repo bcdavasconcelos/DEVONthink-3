@@ -1,4 +1,4 @@
-# DT find ISBN and add to Bookends
+# Find ISBN/DOI
 
 ```applescript
 
@@ -28,14 +28,7 @@ on performSmartRule(theRecords)
 			add custom meta data theISBN for theMDField to theRecord
 			add custom meta data theDOI for theMDField2 to theRecord
 			
-			
-			tell application "Bookends"
-				if theDOI is not "" then set pubList to quick add {theDOI}
-				
-				if theDOI is "" then
-					if theISBN is not "" then set pubList to quick add {theISBN}
-				end if
-			end tell
+		
 			
 		end repeat
 	end tell
