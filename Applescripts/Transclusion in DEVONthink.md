@@ -2,7 +2,7 @@
 
 [Alternatives for achieving transclusion within DT3 (wiki post)][1]
 
-````applescript
+```applescript
 
 
 use AppleScript version "2.4" -- Yosemite (10.10) or later
